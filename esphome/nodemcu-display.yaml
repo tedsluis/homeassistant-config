@@ -1,0 +1,129 @@
+# device specific settings
+substitutions:
+  device_name: nodemcu-display
+  friendly_name: NodeMcu display
+  device_ip: 192.168.11.140
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: ${device_ip}
+    gateway: 192.168.11.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: '${device_name}_Fallback_Hotspot'
+    password: !secret wifi_password
+
+captive_portal:
+
+web_server:
+  port: 80
+  auth:
+    username: admin
+    password: !secret webserver_password
+
+sensor:
+  - platform: wifi_signal
+    name: '${device_name}_wifi_signal'
+    update_interval: 60s
+  - platform: uptime
+    name: '${device_name}_uptime'
+  - platform: homeassistant
+    id: voordeur_temperature
+    entity_id: sensor.158d0002e8d2f1_motion_voordeur_buiten_temperature
+    internal: true
+  - platform: homeassistant
+    id: woonkamer_temperature
+    entity_id: sensor.woonkamer_temperatuur
+    internal: true
+  - platform: homeassistant
+    id: kamerstijn_temperature
+    entity_id: sensor.158d00027725d7_weather_slaapkamer_stijn_temperature
+    internal: true
+
+# firmware version
+text_sensor:
+  - platform: version
+    name: '${device_name}_version'
+  - platform: wifi_info
+    ip_address:
+      name: ${device_ip}
+    ssid:
+      name: !secret wifi_ssid
+    bssid:
+      name: !secret wifi_ssid
+
+# ssd1306 128x64
+# I2C SDA (D6/GPIO14), SCL (D5/GPIO12)
+i2c:
+  sda: GPIO14
+  scl: GPIO12
+
+time:
+  - platform: homeassistant
+    id: esptime
+
+font:
+  - file: "fonts/ComicSansMS3.ttf"
+    id: my_font
+    size: 12
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    reset_pin: 0
+    address: 0x3C
+    lambda: |-
+      it.strftime(0, 0, id(my_font), "%H:%M", id(esptime).now());
+      if (id(woonkamer_temperature).has_state())  { it.printf(0, 15, id(my_font), "woonkamer: %.1f°",  id(woonkamer_temperature).state); }
+      if (id(voordeur_temperature).has_state())   { it.printf(0, 31, id(my_font), "buiten: %.1f°",  id(voordeur_temperature).state); }
+      if (id(kamerstijn_temperature).has_state()) { it.printf(0, 47, id(my_font), "kamer stijn: %.1f°",  id(kamerstijn_temperature).state); }
+
+switch:
+  - platform: restart
+    name: "${device_name} Restart"
+
+binary_sensor:
+  - platform: status
+    name: "${device_name} Status"
+
+# if (id(inside_temperature).has_state()) { it.printf(127, 23, id(font3), TextAlign::TOP_RIGHT , "%.1f°", id(inside_temperature).state);    }
+# display:
+#   - platform: ssd1306_i2c
+#     model: "SSD1306 128x64"
+#     # reset_pin: ??
+#     address: 0x3C
+#     lambda: |-
+#       it.print(0, 0, id(my_font), "Ted Sluis");
+#       it.print(0, 15, id(my_font), "J.S. Bachstraat 20");
+#       it.print(0, 31, id(my_font), "3533XC Utrecht");
+#       it.print(0, 47, id(my_font), "+31(0)620614318");
+
+
+
+
+    
+    

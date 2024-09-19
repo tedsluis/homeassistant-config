@@ -1,0 +1,7 @@
+esp32_cam_vertical_flip:
+  name: Vertical flip camera
+  icon: mdi:flip-vertical
+
+esp32_cam_horizontal_mirror:
+  name: Horizontal mirror camera
+  icon: mdi:flip-horizontal

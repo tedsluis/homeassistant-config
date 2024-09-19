@@ -1,0 +1,27 @@
+esp32_cam_brightness:
+  name: Brightness
+  initial: 0
+  min: -2
+  max: 2
+  step: 1
+
+esp32_cam_saturation:
+  name: Saturation
+  initial: 0
+  min: -2
+  max: 2
+  step: 1
+
+esp32_cam_contrast:
+  name: Contrast
+  initial: 0
+  min: -2
+  max: 2
+  step: 1
+
+esp32_cam_jpeg_quality:
+  name: Quality
+  initial: 10
+  min: 10
+  max: 63
+  step: 1

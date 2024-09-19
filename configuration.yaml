@@ -1,0 +1,105 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+automation: !include automations.yaml
+
+# Example configuration.yaml entry
+device_tracker:
+  # - platform: bluetooth_tracker
+  #   interval_seconds: 25
+  #   consider_home: 120
+  #   new_device_defaults:
+  #     track_new_devices: true
+  - platform: bluetooth_le_tracker
+    track_new_devices: True
+    track_battery: True
+
+homeassistant:
+  customize_glob:
+    "sensor.*_battery":
+      icon_template: if (state < 10 ) return '#f44336'; else if (state < 25 ) return '#ff9800'; else return '#4caf50';
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+# http proxy settings
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.11.0/24
+    - 172.30.0.0/16
+    - ::1
+    - 127.0.0.1
+  login_attempts_threshold: 5
+  ip_ban_enabled: true
+
+input_boolean: !include input_boolean.yaml
+
+input_select: !include input_select.yaml
+
+input_number: !include input_number.yaml
+
+logger:
+  # The next line sets the default logging level, for all python modules.
+  # It seems "recommended" to set it to avoid too much logging.
+  default: warning
+  logs:
+    custom_components.zha_toolkit: debug
+    homeassistant.components.zha: debug
+    zigpy: debug
+
+lovelace:
+  mode: yaml
+
+panel_custom:
+  - name: Supervisor
+    url_path: hassio/system
+    sidebar_title: Supervisor
+    sidebar_icon: mdi:home-assistant
+    module_url: /local/panel-redirect.js
+
+powercalc:
+  force_update_frequency: 00:01:00 #Each minute
+  power_sensor_naming: "{} Powersensor"
+  create_energy_sensors: true
+  ignore_unavailable_state: false
+
+recorder:
+  db_url: !secret mariadb_url
+  purge_keep_days: 30
+  commit_interval: 20
+
+script: !include scripts.yaml
+
+scene: !include scenes.yaml
+
+sensor: !include sensors.yaml
+
+#service: !include services.yaml
+
+system_log:
+  max_entries: 200
+
+template:
+  - sensor:
+      - name: woonkamer_temperatuur
+        unit_of_measurement: "°C"
+        state: "{{ state_attr('climate.gtw_16', 'current_temperature') }}"
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+zha_toolkit:
+
+zha:
+  zigpy_config:
+    ota:
+      otau_directory: /config/zigpy_ota
+      ikea_provider: true
+      inovelli_provider: true
+      ledvance_provider: true
+      salus_provider: true
+      sonoff_provider: true
+      thirdreality_provider: true

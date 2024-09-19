@@ -1,0 +1,29 @@
+esphome:
+  name: sonoff
+  friendly_name: sonoff
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "8wKoFIdTxS1OSqe5BMYG2Rp+M64DOxaZabu4WtzsFMI="
+
+ota:
+  password: "7df7055d3598e81682b586cf26f2aa2b"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sonoff Fallback Hotspot"
+    password: "gBExYK3tBc96"
+
+captive_portal:
+    

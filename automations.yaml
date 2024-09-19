@@ -1,0 +1,188 @@
+- id: "1696567289893"
+  alias: notify_leaveing_zone
+  description: "Ted left the building..."
+  use_blueprint:
+    path: homeassistant/notify_leaving_zone.yaml
+    input:
+      person_entity: person.ted_sluis
+      zone_entity: zone.home
+      notify_device: 533b881f0d26d9db4de40e2070ddaa01
+
+- id: "verwarming laag na 00:00"
+  description: "Wanneer na 00:00 de verwarming aanstaat, dan laag zetten."
+  trigger:
+    platform: time
+    at: "00:00:00"
+  action:
+    - service: climate.set_temperature
+      data:
+        temperature: 12
+      target:
+        area_id: living_room
+        device_id: d5a3987b1602c16b4a21ee296938315c
+        entity_id: climate.gtw_16
+
+- id: "esp32-cam resolution"
+  alias: "Resolution"
+  trigger:
+    platform: state
+    entity_id: input_select.esp32_cam_resolution
+    to:
+  action:
+    - service: esphome.esp32_cam_camera_set_param
+      data:
+        name: "resolution"
+        value: 99
+        data: "{{ states('input_select.esp32_cam_resolution') }}"
+        state: false
+
+- id: "esp32-cam Brightness"
+  alias: "Brightness"
+  trigger:
+    platform: state
+    entity_id: input_number.esp32_cam_brightness
+    to:
+  action:
+    - service: esphome.esp32_cam_camera_set_param
+      data:
+        name: "brightness"
+        value: "{{ states('input_number.esp32_cam_brightness') | int }}"
+        data: ""
+        state: false
+
+- id: "esp32-cam Saturation"
+  alias: "Saturation"
+  trigger:
+    platform: state
+    entity_id: input_number.esp32_cam_saturation
+    to:
+  action:
+    - service: esphome.esp32_cam_camera_set_param
+      data:
+        name: "saturation"
+        value: "{{ states('input_number.esp32_cam_saturation') | int }}"
+        data: ""
+        state: false
+
+- id: "esp32-cam Contrast"
+  alias: "Contrast"
+  trigger:
+    platform: state
+    entity_id: input_number.esp32_cam_contrast
+    to:
+  action:
+    - service: esphome.esp32_cam_camera_set_param
+      data:
+        name: "contrast"
+        value: "{{ states('input_number.esp32_cam_contrast') | int }}"
+        data: ""
+        state: false
+
+- id: "esp32-cam vertical flip"
+  alias: "VerticalFlip"
+  trigger:
+    platform: state
+    entity_id: input_boolean.esp32_cam_vertical_flip
+    to:
+  action:
+    - service: esphome.esp32_cam_camera_set_param
+      data:
+        name: "verticalflip"
+        value: 99
+        data: ""
+        state: "{{ states('input_boolean.esp32_cam_vertical_flip') }}"
+
+- id: "esp32-cam horizontal mirror"
+  alias: "HorizontalMirror"
+  trigger:
+    platform: state
+    entity_id: input_boolean.esp32_cam_horizontal_mirror
+    to:
+  action:
+    - service: esphome.esp32_cam_camera_set_param
+      data:
+        name: "horizontalmirror"
+        value: 99
+        data: ""
+        state: "{{ states('input_boolean.esp32_cam_horizontal_mirror') }}"
+
+- id: "esp32-cam Quality"
+  alias: "Quality"
+  trigger:
+    platform: state
+    entity_id: input_number.esp32_cam_jpeg_quality
+    to:
+  action:
+    - service: esphome.esp32_cam_camera_set_param
+      data:
+        name: "quality"
+        value: "{{ states('input_number.esp32_cam_jpeg_quality') | int }}"
+        data: ""
+        state: false
+
+- id: "smartdoorbell"
+  alias: Notify Doorbell
+  description: ""
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.smart_doorbell_doorbell
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: notify.mobile_app_pixel_7a
+      data:
+        title: Deurbel gaat.
+        message: "{{ now().strftime('%A %H:%M:%S') }}: Er belt iemand aan de deur!"
+        data:
+          channel: "bel"
+          notification_icon: "mdi:bell"
+          color: "green"
+          importance: high
+          vibrationPattern: "1000, 1000, 1000"
+    - service: light.turn_on
+      data:
+        flash: short
+        entity_id: light.lamp_slaapkamer_stijn_huelight
+
+- id: "rookmelder-aan"
+  alias: "rookmelder aan"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.heiman_cosensor_em_cv_ketel_gas, binary_sensor.heimans_smokesensor_ef_3_0_gang_rook, binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook, binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: notify.mobile_app_pixel_7a
+      data:
+        title: rookmelder alarm!
+        message: >-
+          {{ now().strftime("%A %H:%M:%S") }}: Rookmelder triggered. cv ketel: {{ states('binary_sensor.heiman_cosensor_em_cv_ketel_gas') }}, overloop: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_gang_rook') }}, keuken: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook') }}, overloop: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook') }}.
+        data:
+          channel: "rookmelder"
+          color: "red"
+          importance: high
+          vibrationPattern: "1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000"
+          notification_icon: "mdi:fire-alert"
+
+- id: "rookmelder-uit"
+  alias: "rookmelder uit"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.heiman_cosensor_em_cv_ketel_gas, binary_sensor.heimans_smokesensor_ef_3_0_gang_rook, binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook, binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
+      from: "on"
+      to: "off"
+  condition: []
+  action:
+    - service: notify.mobile_app_pixel_7a
+      data:
+        title: rookmelder uit.
+        message: >-
+          {{ now().strftime("%A %H:%M:%S") }}: Rookmelder ging uit. cv ketel: {{ states('binary_sensor.heiman_cosensor_em_cv_ketel_gas') }}, overloop: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_gang_rook') }}, keuken: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook') }}, overloop: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook') }}.
+        data:
+          channel: "rookmelder"
+          color: "red"
+          importance: high
+          vibrationPattern: "1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000"
+          notification_icon: "mdi:fire-alert"

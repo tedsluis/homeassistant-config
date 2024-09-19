@@ -1,0 +1,117 @@
+# device specific settings
+substitutions:
+  device_name: esp32-c3-devkitc-02
+  friendly_name: esp32 c3 devkit c-02
+  device_ip: 192.168.11.131
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: ${device_ip}
+    gateway: 192.168.11.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: 'esp32-c3-devkit_Fallback_Hotspot'
+    password: !secret wifi_password
+
+captive_portal:
+
+web_server:
+  port: 80
+  auth:
+    username: admin
+    password: !secret webserver_password
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+sensor:
+  - platform: wifi_signal
+    name: '${device_name}_wifi_signal'
+    update_interval: 60s
+  - platform: uptime
+    name: '${device_name}_uptime'
+ 
+text_sensor:
+  - platform: version
+    name: '${device_name}_version'
+  - platform: wifi_info
+    ip_address:
+      name: ${device_ip}
+    ssid:
+      name: !secret wifi_ssid
+    bssid:
+      name: !secret wifi_ssid
+
+binary_sensor:
+  - platform: status
+    name: "${device_name} Status"
+
+switch:
+  - platform: restart
+    name: "${device_name} Restart"
+
+font:
+  - file: "fonts/ComicSansMS3.ttf"
+    id: my_font
+    size: 12
+
+# SPI configuration
+spi:
+  clk_pin: GPIO6  # CLK pin
+  mosi_pin: GPIO7  # DIN/MOSI pin
+  miso_pin: GPIO2  # Not used, but must be defined for SPI
+  
+# E-Ink Waveshare Display configuration
+display:
+  - platform: waveshare_epaper
+    cs_pin: GPIO10  # Chip Select (CS) pin
+    dc_pin: GPIO9   # Data/Command (DC) pin
+    busy_pin: GPIO19  # Busy pin
+    reset_pin: GPIO18  # Reset pin
+    model: 7.50in   # Choose the correct model for your display
+    update_interval: 30s  # Adjust as necessary
+    # full_update_every: 30
+    lambda: |-
+      it.print(0, 0, id(my_font), "Hello World!");
+
+
+# display:
+#   - platform: ssd1306_i2c
+#     model: "SSD1306 128x64"
+#     reset_pin: 0
+#     address: 0x3C
+#     lambda: |-
+#       it.strftime(0, 0, id(my_font), "%H:%M", id(homeassistant_time).now());
+#       if (id(woonkamer_temperature).has_state())  { it.printf(0, 15, id(my_font), "woonkamer: %.1f°",  id(woonkamer_temperature).state); }
+#       if (id(voordeur_temperature).has_state())   { it.printf(0, 31, id(my_font), "buiten: %.1f°",  id(voordeur_temperature).state); }
+#       if (id(kamerstijn_temperature).has_state()) { it.printf(0, 47, id(my_font), "kamer stijn: %.1f°",  id(kamerstijn_temperature).state); }
+
+
+

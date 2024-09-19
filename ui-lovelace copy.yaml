@@ -1,0 +1,265 @@
+title: Bachstraat20
+views:
+  - path: default_view
+    title: Home
+    cards:
+      - type: entities
+        entities:
+          - sensor.lumi_lumi_weather_humidity_6
+          - sensor.lumi_lumi_weather_pressure_6
+          - sensor.lumi_lumi_weather_temperature_6
+        title: Badkamer
+      - type: entities
+        entities:
+          - light.lamp_boven_2de_trap_huelight
+        title: Boven aan de trap
+      - type: entities
+        entities:
+          - light.lamp_gang_huelight
+          - siren.heiman_smokesensor_ef_3_0_siren_2
+          - sensor.electricity_maps_co2_intensity
+          - sensor.electricity_maps_grid_fossil_fuel_percentage
+          - binary_sensor.heiman_smokesensor_ef_3_0_smoke_2
+          - sensor.zonneplan_current_electricity_tariff
+          - sensor.zonneplan_current_gas_tariff
+          - sensor.zonneplan_current_usage
+          - sensor.zonneplan_p1_electricity_average
+          - sensor.zonneplan_p1_electricity_consumption
+          - sensor.zonneplan_p1_electricity_consumption_today
+          - sensor.zonneplan_p1_electricity_last_measured
+          - sensor.zonneplan_p1_electricity_last_measured_production
+          - sensor.zonneplan_p1_electricity_production
+          - sensor.zonneplan_p1_electricity_returned_today
+          - sensor.zonneplan_p1_gas_consumption_today
+          - sensor.zonneplan_p1_gas_last_measured
+          - sensor.zonneplan_status_tip
+          - sensor.zonneplan_sustainability_score
+        title: Gang
+      - type: entities
+        entities:
+          - light.lamp_halletje_huelight
+        title: Halletje
+      - type: entities
+        entities:
+          - light.lumi_lumi_router_light
+          - sensor.lumi_lumi_weather_humidity_3
+          - sensor.lumi_lumi_weather_pressure_3
+          - sensor.lumi_lumi_weather_temperature_3
+          - binary_sensor.lumi_lumi_vibration_aq1_vibration
+          - binary_sensor.lumi_lumi_router_opening
+        title: Keuken
+      - type: entities
+        entities:
+          - sensor.lumi_lumi_weather_humidity_5
+          - sensor.lumi_lumi_weather_pressure_5
+          - sensor.lumi_lumi_weather_temperature_5
+          - sensor.sensor_22939_pm_10
+          - sensor.sensor_22939_pm_2_5
+        title: Schuur
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - light.lamp_slaapkamer_huelight
+              - sensor.lumi_lumi_weather_humidity_4
+              - sensor.lumi_lumi_weather_pressure_4
+              - sensor.lumi_lumi_weather_temperature_4
+            title: Slaapkamer
+          - type: media-control
+            entity: media_player.grote_slaapkamer
+      - type: entities
+        entities:
+          - light.shenzhen_homa_homa1031_light
+        title: slaapkamer Naud
+      - type: entities
+        entities:
+          - light.lamp_slaapkamer_stijn_huelight
+        title: Slaapkamer Stijn
+      - type: entities
+        entities:
+          - light.lamp_studeerkamer_huelight
+          - light.lamp_wasmachine_huelight
+          - binary_sensor.lumi_lumi_sensor_magnet_aq2_opening
+          - sensor.lumi_lumi_weather_humidity_7
+          - sensor.lumi_lumi_weather_pressure_7
+          - sensor.lumi_lumi_weather_temperature_7
+          - binary_sensor.lumi_lumi_sensor_magnet_aq2_opening_2
+          - binary_sensor.heiman_cosensor_em_cv_ketel_iaszone
+        title: Studeerkamer
+      - type: entities
+        entities:
+          - light.lamp_voordeur_huelight
+          - binary_sensor.lumi_lumi_sensor_motion_aq2_iaszone_5
+          - sensor.lumi_lumi_sensor_motion_aq2_illuminance_5
+          - binary_sensor.lumi_lumi_sensor_motion_aq2_occupancy_5
+          - sensor.lumi_lumi_weather_humidity_8
+          - sensor.lumi_lumi_weather_pressure_8
+          - sensor.lumi_lumi_weather_temperature_8
+        title: Voordeur buiten
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - switch.gtw_16_fireplace_mode
+              - remote.samsung_5_series_32
+              - sensor.lumi_lumi_weather_humidity_2
+              - sensor.lumi_lumi_weather_pressure_2
+              - sensor.lumi_lumi_weather_temperature_2
+              - sensor.dhw_water_temperature
+              - sensor.gtw_16_current_schedule_setpoint
+              - sensor.gtw_16_next_setpoint
+              - sensor.gtw_16_next_setpoint_time
+              - sensor.hacs
+              - sensor.home_outdoor_temperature
+              - sensor.home_water_pressure
+            title: Woonkamer
+          - type: media-control
+            entity: media_player.bachstraat20
+          - type: media-control
+            entity: media_player.samsung_5_series_32
+          - type: thermostat
+            entity: climate.gtw_16
+      - title: Energiedistributie vandaag
+        type: energy-distribution
+      - type: entities
+        entities:
+          - person.ted_sluis
+      - type: entities
+        entities:
+          - calendar.bachstraat20
+        title: Kalender
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: media-control
+            entity: media_player.tv_samsung_5_series_32
+          - type: media-control
+            entity: media_player.laptop_u1k9ucvs
+      - type: entities
+        entities:
+          - sensor.local_ip
+        title: Sensor
+      - type: weather-forecast
+        entity: weather.forecast_bachstraat20
+        show_forecast: false
+      - type: entities
+        entities:
+          - entity: sensor.lumi_lumi_weather_humidity
+            name: Humidity
+          - entity: sensor.lumi_lumi_weather_pressure
+            name: Pressure
+          - entity: sensor.lumi_lumi_weather_temperature
+            name: Temperature
+        title: 158d000231046d
+      - type: entities
+        entities:
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_iaszone_4
+            name: Iaszone
+          - entity: sensor.lumi_lumi_sensor_motion_aq2_illuminance_4
+            name: Illuminance
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_occupancy_4
+            name: Occupancy
+        title: 158d00029a5cd2
+      - type: entities
+        entities:
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_iaszone_6
+            name: Iaszone
+          - entity: sensor.lumi_lumi_sensor_motion_aq2_illuminance_6
+            name: Illuminance
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_occupancy_6
+            name: Occupancy
+        title: 158d000313cbfb
+      - type: entities
+        entities:
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_iaszone
+            name: Iaszone
+          - entity: sensor.lumi_lumi_sensor_motion_aq2_illuminance
+            name: Illuminance
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_occupancy
+            name: Occupancy
+        title: 158d000319c29f
+      - type: entities
+        entities:
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_iaszone_3
+            name: Iaszone
+          - entity: sensor.lumi_lumi_sensor_motion_aq2_illuminance_3
+            name: Illuminance
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_occupancy_3
+            name: Occupancy
+        title: 158d00046603e3
+      - type: entities
+        entities:
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_iaszone_2
+            name: Iaszone
+          - entity: sensor.lumi_lumi_sensor_motion_aq2_illuminance_2
+            name: Illuminance
+          - entity: binary_sensor.lumi_lumi_sensor_motion_aq2_occupancy_2
+            name: Occupancy
+        title: 158d00046663d4
+      - type: entities
+        entities:
+          - siren.heiman_smokesensor_ef_3_0_siren
+          - entity: binary_sensor.heiman_smokesensor_ef_3_0_smoke
+            name: Smoke
+        title: HEIMAN SmokeSensor-EF-3.0
+      - type: entities
+        entities:
+          - siren.heiman_smokesensor_ef_3_0_siren_3
+          - entity: binary_sensor.heiman_smokesensor_ef_3_0_smoke_3
+            name: Smoke
+        title: HEIMAN SmokeSensor-EF-3.0
+  - title: home2
+    cards:
+      - type: entities
+        entities:
+          - entity: binary_sensor.heiman_cosensor_em_cv_ketel_iaszone
+            name: Gas
+        title: HEIMAN COSensor-EM
+        state_color: true
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - entity: switch.gtw_16_fireplace_mode
+                name: Fireplace Mode
+            title: GTW-16
+          - type: thermostat
+            entity: climate.gtw_16
+      - type: entities
+        entities:
+          - entity: sensor.gtw_16_current_schedule_setpoint
+            name: Current Schedule Setpoint
+          - entity: sensor.gtw_16_next_setpoint
+            name: Next Setpoint
+          - entity: sensor.gtw_16_next_setpoint_time
+            name: Next Setpoint Time
+        title: GTW-16
+      - type: history-graph
+        entities:
+          - entity: device_tracker.laptop_7613
+          - entity: device_tracker.laptop_u1k9ucvs
+          - entity: device_tracker.naudlenovo
+          - entity: device_tracker.lenovo
+          - entity: device_tracker.desktop_jig6qdt
+          - entity: device_tracker.00_10_75_57_40_0b
+          - entity: device_tracker.1e_8d_50_d7_10_cf
+          - entity: device_tracker.70_f1_1c_40_fc_b1
+          - entity: device_tracker.oneplus_nord
+          - entity: device_tracker.oneplus5t
+          - entity: device_tracker.pixel_7a
+        title: aan/uit
+        hours_to_show: 48
+      - type: entities
+        entities:
+          - entity: sensor.sensor_22939_pm_10
+            name: PM 10
+          - entity: sensor.sensor_22939_pm_2_5
+            name: PM 2.5
+        title: Sensor 22939

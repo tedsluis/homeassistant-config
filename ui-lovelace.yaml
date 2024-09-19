@@ -1,0 +1,1104 @@
+title: Bachstraat20
+views:
+  - path: default_view
+    title: x
+    icon: mdi:weather-partly-cloudy
+    cards:
+      - type: weather-forecast
+        entity: weather.forecast_bachstraat20
+        show_forecast: false
+
+      - type: thermostat
+        entity: climate.gtw_16
+
+      - title: Woonkamertermostaat temperatuur
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: climate.gtw_16
+            name: " "
+
+      - title: buiten temperatuur
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d00047be924_motion_schuur_tuin_temperature
+            name: tuin
+          - entity: sensor.158d000273424b_weather_schuur_temperature
+            name: schuur
+          - entity: sensor.158d00046608d2_motion_schuur_steeg_temperature
+            name: steeg
+          - entity: sensor.158d0002e8d2f1_motion_voordeur_buiten_temperature
+            name: voordeur
+          - entity: sensor.158d00036b2087_weather_voordeur_buiten_temperature
+            name: voordeur
+
+      - title: beneden temperatuur
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d000313cbfb_motion_halletje_temperature
+            name: halletje
+          - entity: sensor.158d000319c29f_motion_gang_temperature
+            name: gang
+          - entity: sensor.158d00046603e3_motion_keuken_temperature
+            name: keuken
+          - entity: sensor.158d000238fcc1_weather_keuken_temperature
+            name: keuken
+          - entity: sensor.158d0002b78209_vibaration_ijskast_temperature
+            name: ijskast
+          - entity: sensor.158d0002789adf_weather_woonkamer_temperature
+            name: woonkamer
+          - entity: sensor.00158d000a83a3ae_weather_halletje_temperature
+            name: halletje
+
+      - title: eerste verdieping temperatuur
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.00158d000a83bb5a_weather_overloop_temperature
+            name: overloop
+          - entity: sensor.158d000273d342_weather_slaapkamer_temperature
+            name: slaapkamer
+          - entity: sensor.158d00027725d7_weather_slaapkamer_stijn_temperature
+            name: slaapkamer stijn
+          - entity: sensor.158d00036b1a7f_weather_badkamer_temperature
+            name: badkamer
+
+      - title: tweede verdieping temperatuur
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d00025ed544_magnet_studeerkamer_raam_rechts_temperature
+            name: raam rechts
+          - entity: sensor.158d0002e24f96_magnet_studeerkamer_raam_links_temperature
+            name: raam links
+          - entity: sensor.158d00029a5cd2_motion_studeerkamer_temperature
+            name: studeerkamer
+          - entity: sensor.158d00046663d4_motion_boven_aan_de_trap_temperature
+            name: boven trap
+          - entity: sensor.00158d000a833b95_weather_studeerkamer_temperature
+            name: studeerkamer
+          - entity: sensor.158d000231046d_weather_studeerkamer_zoek_temperature
+            name: viering
+          - entity: sensor.00158d000a83e4af_weather_slaapkamer_naud_verwarming_temperature
+            name: naud verwarming
+          - entity: sensor.00158d00027257cd_weather_slaapkamer_naud_temperature
+            name: slaapkamer naud
+
+      - title: Woonkamertermostaat
+        type: entities
+        entities:
+          - entity: switch.gtw_16_fireplace_mode
+            name: openhaardstand
+          - entity: sensor.gtw_16_next_setpoint_time
+            name: volgend instelpunt tijdstip
+
+      - title: Instelpunt temperatuur
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.gtw_16_current_schedule_setpoint
+            name: huidig
+          - entity: sensor.gtw_16_next_setpoint
+            name: volgende
+
+      - title: Tapwatertemperatuur
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.dhw_water_temperature
+            name: tapwater temperatuur
+
+      - title: Luchtvochtigheid
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.00158d00027257cd_weather_slaapkamer_naud_humidity
+            name: kamer naud
+          - entity: sensor.00158d000a833b95_weather_studeerkamer_humidity
+            name: studeerkamer
+          - entity: sensor.00158d000a83a3ae_weather_halletje_humidity
+            name: halletje
+          - entity: sensor.00158d000a83bb5a_weather_overloop_humidity
+            name: overloop
+          - entity: sensor.00158d000a83e4af_weather_slaapkamer_naud_verwarming_humidity
+            name: verwarming naud
+          - entity: sensor.158d000231046d_weather_studeerkamer_zoek_humidity
+            name: vliering
+          - entity: sensor.158d000238fcc1_weather_keuken_humidity
+            name: keuken
+          - entity: sensor.158d000273424b_weather_schuur_humidity
+            name: schuur
+          - entity: sensor.158d000273d342_weather_slaapkamer_humidity
+            name: slaapkamer
+          - entity: sensor.158d00027725d7_weather_slaapkamer_stijn_humidity
+            name: kamer stijn
+          - entity: sensor.158d0002789adf_weather_woonkamer_humidity
+            name: woonkamer
+          - entity: sensor.158d00036b1a7f_weather_badkamer_humidity
+            name: badkamer
+          - entity: sensor.158d00036b2087_weather_voordeur_buiten_humidity
+            name: voordeur buiten
+
+      - title: Luchtdruk
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.00158d00027257cd_weather_slaapkamer_naud_pressure
+            name: kamer naud
+          - entity: sensor.00158d000a833b95_weather_studeerkamer_pressure
+            name: studeerkamer
+          - entity: sensor.00158d000a83a3ae_weather_halletje_pressure
+            name: halletje
+          - entity: sensor.00158d000a83bb5a_weather_overloop_pressure
+            name: overloop
+          - entity: sensor.00158d000a83e4af_weather_slaapkamer_naud_verwarming_pressure
+            name: verwarming naud
+          - entity: sensor.158d000231046d_weather_studeerkamer_zoek_pressure
+            name: vliering
+          - entity: sensor.158d000238fcc1_weather_keuken_pressure
+            name: keuken
+          - entity: sensor.158d000273424b_weather_schuur_pressure
+            name: schuur
+          - entity: sensor.158d000273d342_weather_slaapkamer_pressure
+            name: slaapkamer
+          - entity: sensor.158d00027725d7_weather_slaapkamer_stijn_pressure
+            name: kamer stijn
+          - entity: sensor.158d0002789adf_weather_woonkamer_pressure
+            name: woonkamer
+          - entity: sensor.158d00036b1a7f_weather_badkamer_pressure
+            name: badkamer
+          - entity: sensor.158d00036b2087_weather_voordeur_buiten_pressure
+            name: voordeur buiten
+
+      - title: Fijnstof
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.sensor_22939_pm_10
+            name: 10 pm
+          - entity: sensor.sensor_22939_pm_2_5
+            name: 2.5 pm
+
+  - title: Licht
+    icon: mdi:lightbulb
+    cards:
+      - title: Boven aan de trap
+        type: entities
+        entities:
+          - light.lamp_boven_2de_trap_huelight
+
+      - title: Halletje
+        type: entities
+        entities:
+          - light.lamp_halletje_huelight
+
+      - title: Keuken
+        type: entities
+        entities:
+          - light.lamp_keuken_licht
+
+      - title: Slaapkamer
+        type: entities
+        entities:
+          - light.lamp_slaapkamer_huelight
+
+      - title: slaapkamer Naud
+        type: entities
+        entities:
+          - light.lamp_slaapkamer_naud_light
+
+      - title: Slaapkamer Stijn
+        type: entities
+        entities:
+          - light.lamp_slaapkamer_stijn_huelight
+
+      - title: Studeerkamer
+        type: entities
+        entities:
+          - light.lamp_studeerkamer_huelight
+          - light.lamp_wasmachine_huelight
+
+      - title: Voordeur buiten
+        type: entities
+        entities:
+          - light.lamp_voordeur_huelight
+
+      - title: gang
+        type: entities
+        entities:
+          - light.lamp_gang_huelight
+
+      - title: Badkamer
+        type: entities
+        entities:
+          - light.lamp_badkamer_licht
+
+      - title: Overloop
+        type: entities
+        entities:
+          - light.lamp_overloop_licht
+
+  - title: schakelaars
+    icon: mdi:light-switch
+    cards:
+      - title: sonoff pow r2 tv
+        type: entities
+        entities:
+          - entity: switch.sonoffpowr2tv_sonoffpowr2tv_switch
+            name: switch
+          - entity: light.sonoffpowr2tv_sonoffpowr2tv_bue_led
+            name: blue led
+          - entity: sensor.sonoffpowr2tv_sonoffpowr2tv_power
+            name: power
+          - entity: sensor.sonoffpowr2tv_sonoffpowr2tv_uptime
+            name: uptime
+          - entity: sensor.sonoffpowr2tv_sonoffpowr2tv_version
+            name: version
+      - title: sonoff pow r2 bank
+        type: entities
+        entities:
+          - entity: switch.sonoffpowr2bank_sonoffpowr2bank_switch
+            name: switch
+          - entity: light.sonoffpowr2bank_sonoffpowr2bank_bue_led
+            name: blue led
+          - entity: sensor.sonoffpowr2bank_sonoffpowr2bank_power
+            name: power
+          - entity: sensor.sonoffpowr2bank_sonoffpowr2bank_uptime
+            name: uptime
+          - entity: sensor.sonoffpowr2bank_sonoffpowr2bank_version
+            name: version
+
+      - title: stekkerblok kamer Stijn
+        type: entities
+        entities:
+          - entity: switch.stekkerblok_kamer_stijn_schakelaar_0
+            name: schakelaar 1 (beeldscherm)
+          - entity: switch.stekkerblok_kamer_stijn_schakelaar_2
+            name: schakelaar 2
+          - entity: switch.stekkerblok_kamer_stijn_schakelaar_3
+            name: schakelaar 3 (telefoonlader)
+          - entity: switch.stekkerblok_kamer_stijn_schakelaar_4
+            name: schakelaar 4 (Laptoplader)
+          - entity: switch.stekkerblok_kamer_stijn_schakelaar_5
+            name: USB aansluitingen
+          - entity: switch.stekkerblok_kamer_stijn_kinderslot
+            name: kinderslot
+
+  - title: Camera
+    icon: mdi:video
+    cards:
+      - name: esp32-cam
+        type: picture-entity
+        entity: camera.192_168_11_125
+        camera_view: live
+
+      - title: esp32-cam
+        type: entities
+        entities:
+          - entity: input_number.esp32_cam_brightness
+            name: brightness
+          - entity: input_number.esp32_cam_contrast
+            name: contrast
+          - entity: input_number.esp32_cam_saturation
+            name: saturation
+          - entity: input_select.esp32_cam_resolution
+            name: resolution
+          - entity: input_number.esp32_cam_jpeg_quality
+            name: quality
+          - entity: input_boolean.esp32_cam_vertical_flip
+            name: vertical flip
+          - entity: input_boolean.esp32_cam_horizontal_mirror
+            name: horizontal mirror
+
+  - title: Energie verbruik
+    icon: mdi:lightning-bolt-circle
+    cards:
+      - title: Energiedistributie vandaag
+        type: energy-distribution
+      - title: Zoneplan
+        type: entities
+        entities:
+          - sensor.electricity_maps_co2_intensity
+          - sensor.electricity_maps_grid_fossil_fuel_percentage
+          - sensor.zonneplan_current_electricity_tariff
+          - sensor.zonneplan_current_gas_tariff
+          - sensor.zonneplan_current_usage
+          - sensor.zonneplan_p1_electricity_average
+          - sensor.zonneplan_p1_electricity_consumption
+          - sensor.zonneplan_p1_electricity_consumption_today
+          - sensor.zonneplan_p1_electricity_last_measured
+          - sensor.zonneplan_p1_electricity_last_measured_production
+          - sensor.zonneplan_p1_electricity_production
+          - sensor.zonneplan_p1_electricity_returned_today
+          - sensor.zonneplan_p1_gas_consumption_today
+          - sensor.zonneplan_p1_gas_last_measured
+          - sensor.zonneplan_status_tip
+          - sensor.zonneplan_sustainability_score
+
+  - title: P2000
+    icon: mdi:car-emergency
+    cards:
+      - title: Hulpdiensten - last 2h
+        type: history-graph
+        hours_to_show: 2
+        entities:
+          - entity: sensor.p2000_ambulance
+            name: ambulance
+          - entity: sensor.p2000_brandweer
+            name: brandweer
+          - entity: sensor.p2000_politie
+            name: politie
+          - entity: sensor.p2000_grip
+            name: grip
+          - entity: sensor.utrecht
+            name: Utrecht
+          - entity: sensor.p2000_lifeliners
+            name: lifeliners
+      - title: Hulpdiensten - last 8h
+        type: history-graph
+        hours_to_show: 8
+        entities:
+          - entity: sensor.p2000_ambulance
+            name: ambulance
+          - entity: sensor.p2000_brandweer
+            name: brandweer
+          - entity: sensor.p2000_politie
+            name: politie
+          - entity: sensor.p2000_grip
+            name: grip
+          - entity: sensor.utrecht
+            name: Utrecht
+          - entity: sensor.p2000_lifeliners
+            name: lifeliners
+      - title: Hulpdiensten - last 24h
+        type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: sensor.p2000_ambulance
+            name: ambulance
+          - entity: sensor.p2000_brandweer
+            name: brandweer
+          - entity: sensor.p2000_politie
+            name: politie
+          - entity: sensor.p2000_grip
+            name: grip
+          - entity: sensor.utrecht
+            name: Utrecht
+          - entity: sensor.p2000_lifeliners
+            name: lifeliners
+
+  - title: Detectie
+    icon: mdi:smoke-detector-alert
+    cards:
+      - type: entities
+        entities:
+          - person.ted_sluis
+          
+      - title: bel
+        type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.smart_doorbell_doorbell
+
+      - title: Brand Alarm
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: binary_sensor.heiman_cosensor_em_cv_ketel_gas
+            name: cv-ketel
+          - entity: binary_sensor.heimans_smokesensor_ef_3_0_gang_rook
+            name: gang
+          - entity: binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook
+            name: keuken
+          - entity: binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
+            name: overloop
+
+      - type: history-graph
+        title: "Studeerkamer ramen"
+        hours_to_show: 48
+        entities:
+          - entity: binary_sensor.158d00025ed544_magnet_studeerkamer_raam_rechts_opening
+            name: rechts
+          - entity: binary_sensor.158d0002e24f96_magnet_studeerkamer_raam_links_opening
+            name: links
+
+      - type: history-graph
+        title: "Verlichting"
+        hours_to_show: 48
+        entities:
+          - entity: light.lamp_badkamer_licht
+            name: badkamer
+          - entity: light.lamp_boven_2de_trap_huelight
+            name: boven trap
+          - entity: light.lamp_gang_huelight
+            name: gang
+          - entity: light.lamp_halletje_huelight
+            name: halletje
+          - entity: light.lamp_keuken_licht
+            name: keuken
+          - entity: light.lamp_overloop_licht
+            name: overloop
+          - entity: light.lamp_slaapkamer_huelight
+            name: slaapkamer
+          - entity: light.lamp_slaapkamer_naud_light
+            name: kamer naud
+          - entity: light.lamp_slaapkamer_stijn_huelight
+            name: kamer stijn
+          - entity: light.lamp_studeerkamer_huelight
+            name: studeerkamer
+          - entity: light.lamp_voordeur_huelight
+            name: voordeur
+          - entity: light.lamp_wasmachine_huelight
+            name: wasmachine
+
+      - type: history-graph
+        title: "Trilling"
+        hours_to_show: 48
+        entities:
+          - entity: binary_sensor.158d0002b78209_vibaration_ijskast_trilling
+            name: ijskast
+
+      - type: history-graph
+        title: "Beweging"
+        hours_to_show: 48
+        entities:
+          - entity: binary_sensor.158d00047be924_motion_schuur_tuin_beweging
+            name: tuin
+          - entity: binary_sensor.158d00046608d2_motion_schuur_steeg_beweging
+            name: steeg
+          - entity: binary_sensor.158d00029a5cd2_motion_studeerkamer_beweging
+            name: studeerkamer
+          - entity: binary_sensor.158d0002e8d2f1_motion_voordeur_buiten_beweging
+            name: voor
+          - entity: binary_sensor.158d000313cbfb_motion_halletje_beweging
+            name: halletje
+          - entity: binary_sensor.158d000319c29f_motion_gang_beweging
+            name: gang
+          - entity: binary_sensor.158d00046603e3_motion_keuken_beweging
+            name: keuken
+          - entity: binary_sensor.158d00046663d4_motion_boven_aan_de_trap_beweging
+            name: trap
+
+      - type: history-graph
+        title: "Bezet"
+        hours_to_show: 48
+        entities:
+          - entity: binary_sensor.158d00047be924_motion_schuur_tuin_bezetting
+            name: tuin
+          - entity: binary_sensor.158d00046608d2_motion_schuur_steeg_bezetting
+            name: steeg
+          - entity: binary_sensor.158d00029a5cd2_motion_studeerkamer_bezetting
+            name: studeerkamer
+          - entity: binary_sensor.158d0002e8d2f1_motion_voordeur_buiten_bezetting
+            name: voor
+          - entity: binary_sensor.158d000313cbfb_motion_halletje_bezetting
+            name: halletje
+          - entity: binary_sensor.158d000319c29f_motion_gang_bezetting
+            name: gang
+          - entity: binary_sensor.158d00046603e3_motion_keuken_bezetting
+            name: keuken
+          - entity: binary_sensor.158d00046663d4_motion_boven_aan_de_trap_bezetting
+            name: trap
+
+      - type: history-graph
+        title: "Lichtinval"
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d00047be924_motion_schuur_tuin_licht
+            name: tuin
+          - entity: sensor.158d00046608d2_motion_schuur_steeg_licht
+            name: steeg
+          - entity: sensor.158d00029a5cd2_motion_studeerkamer_licht
+            name: studeerkamer
+          - entity: sensor.158d0002e8d2f1_motion_voordeur_buiten_licht
+            name: voor
+          - entity: sensor.158d000313cbfb_motion_halletje_licht
+            name: halletje
+          - entity: sensor.158d000319c29f_motion_gang_licht
+            name: gang
+          - entity: sensor.158d00046603e3_motion_keuken_licht
+            name: keuken
+          - entity: sensor.158d00046663d4_motion_boven_aan_de_trap_licht
+            name: trap
+          - entity: sensor.licht_sensor_woonkamer_illuminance
+            name: woonkamer
+
+      - type: history-graph
+        entities:
+          - entity: device_tracker.laptop_7613
+          - entity: device_tracker.laptop_u1k9ucvs
+          - entity: device_tracker.naudlenovo
+          - entity: device_tracker.lenovo
+          - entity: device_tracker.desktop_jig6qdt
+          - entity: device_tracker.00_10_75_57_40_0b
+          - entity: device_tracker.1e_8d_50_d7_10_cf
+          - entity: device_tracker.70_f1_1c_40_fc_b1
+          - entity: device_tracker.oneplus_nord
+          - entity: device_tracker.oneplus5t
+          - entity: device_tracker.pixel_7a
+        title: aan/uit
+        hours_to_show: 48
+
+  - title: Media
+    icon: mdi:play-network
+    cards:
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: media-control
+            entity: media_player.grote_slaapkamer
+
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - remote.samsung_5_series_32
+              - sensor.hacs
+            title: Woonkamer
+          - type: media-control
+            entity: media_player.bachstraat20
+          - type: media-control
+            entity: media_player.samsung_5_series_32
+
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: media-control
+            entity: media_player.tv_samsung_5_series_32
+          - type: media-control
+            entity: media_player.laptop_u1k9ucvs
+      - type: entities
+        entities:
+          - sensor.local_ip
+        title: Sensor
+
+      - type: entities
+        entities:
+          - calendar.bachstraat20
+        title: Kalender
+
+  - title: Batterijen niveau
+    icon: mdi:battery
+    cards:
+      - title: Batterijniveau temperatuursensoren
+        type: entities
+        #hours_to_show: 48
+        entities:
+          - entity: sensor.00158d00027257cd_weather_slaapkamer_naud_battery
+            name: slaapkamer naud
+            secondary_info: last-updated
+          - entity: sensor.00158d000a833b95_weather_studeerkamer_battery
+            name: studeerkamer
+            secondary_info: last-updated
+          - entity: sensor.00158d000a83a3ae_weather_halletje_battery
+            name: halletje
+            secondary_info: last-updated
+          - entity: sensor.00158d000a83bb5a_weather_overloop_battery
+            name: overloop
+            secondary_info: last-updated
+          - entity: sensor.00158d000a83e4af_weather_slaapkamer_naud_verwarming_battery
+            name: verwarming naud
+            secondary_info: last-updated
+          - entity: sensor.158d000231046d_weather_studeerkamer_zoek_battery
+            name: vliering
+            secondary_info: last-updated
+          - entity: sensor.158d000238fcc1_weather_keuken_battery
+            name: keuken
+            secondary_info: last-updated
+          - entity: sensor.158d000273424b_weather_schuur_temperature_battery
+            name: schuur
+            secondary_info: last-updated
+          - entity: sensor.158d000273d342_weather_slaapkamer_battery
+            name: slaapkamer
+            secondary_info: last-updated
+          - entity: sensor.158d00027725d7_weather_slaapkamer_stijn_battery
+            name: slaapkamer stijn
+            secondary_info: last-updated
+          - entity: sensor.158d0002789adf_weather_woonkamer_battery
+            name: woonkamer
+            secondary_info: last-updated
+          - entity: sensor.158d00036b1a7f_weather_badkamer_battery
+            name: badkamer
+            secondary_info: last-updated
+          - entity: sensor.158d00036b2087_weather_voordeur_buiten_battery
+            name: voordeur buiten
+            secondary_info: last-updated
+
+      - title: Batterijniveau bewegingsensoren
+        type: entities
+        entities:
+          - entity: sensor.158d00047be924_motion_schuur_tuin_battery
+            name: tuin
+            secondary_info: last-updated
+          - entity: sensor.158d00046608d2_motion_schuur_steeg_battery
+            name: steeg
+            secondary_info: last-updated
+          - entity: sensor.158d00029a5cd2_motion_studeerkamer_battery
+            name: studeerkamer
+            secondary_info: last-updated
+          - entity: sensor.158d0002e8d2f1_motion_voordeur_buiten_battery
+            name: voordeur
+            secondary_info: last-updated
+          - entity: sensor.158d000313cbfb_motion_halletje_battery
+            name: halletje
+            secondary_info: last-updated
+          - entity: sensor.158d000319c29f_motion_gang_battery
+            name: gang
+            secondary_info: last-updated
+          - entity: sensor.158d00046603e3_motion_keuken_battery
+            name: keuken
+            secondary_info: last-updated
+          - entity: sensor.158d00046663d4_motion_boven_aan_de_trap_battery
+            name: boven trap
+            secondary_info: last-updated
+
+      - title: Batterijniveau overige sensoren
+        type: entities
+        entities:
+          - entity: sensor.158d00025ed544_magnet_studeerkamer_raam_rechts_battery
+            name: raam rechts
+            secondary_info: last-updated
+          - entity: sensor.158d0002e24f96_magnet_studeerkamer_raam_links_battery
+            name: raam links
+            secondary_info: last-updated
+          - entity: sensor.158d0002b78209_vibaration_ijskast_battery
+            name: trilsensor ijskast
+            secondary_info: last-updated
+          - entity: sensor.heiman_cosensor_em_cv_ketel_battery
+            name: co2 sensor cv ketel
+            secondary_info: last-updated
+          - entity: sensor.heimans_smokesensor_ef_3_0_gang_battery
+            name: rooksensor gang
+            secondary_info: last-updated
+          - entity: sensor.heimans_smokesensor_ef_3_0_keuken_battery
+            name: rooksensor keuken
+            secondary_info: last-updated
+          - entity: sensor.heimans_smokesensor_ef_3_0_overloop_battery
+            name: rooksensor overloop
+            secondary_info: last-updated
+          - entity: sensor.licht_sensor_woonkamer_battery
+            name: lichtsensor woonkamer
+            secondary_info: last-updated
+
+  - title: Monitoring
+    icon: mdi:access-point
+    cards:
+      - title: "Slechte lqi sensors"
+        type: entity-filter
+        # show_header_toggle: true
+        state_filter:
+          - operator: "!="
+            value: 255
+        entities:
+          - entity: sensor.158d00047be924_motion_schuur_tuin_lqi
+            name: tuin
+            secondary_info: last-changed
+          - entity: sensor.158d00046608d2_motion_schuur_steeg_lqi
+            name: steeg
+            secondary_info: last-changed
+          - entity: sensor.158d00029a5cd2_motion_studeerkamer_lqi
+            name: studeerkamer
+            secondary_info: last-changed
+          - entity: sensor.158d0002e8d2f1_motion_voordeur_buiten_lqi
+            name: voordeur
+            secondary_info: last-changed
+          - entity: sensor.158d000313cbfb_motion_halletje_lqi
+            name: halletje
+            secondary_info: last-changed
+          - entity: sensor.158d000319c29f_motion_gang_lqi
+            name: gang
+            secondary_info: last-changed
+          - entity: sensor.158d00046603e3_motion_keuken_lqi
+            name: keuken
+            secondary_info: last-changed
+          - entity: sensor.158d00046663d4_motion_boven_aan_de_trap_lqi
+            name: boven trap
+            secondary_info: last-changed
+
+      - title: "Slecht lqi lampen"
+        name: "Slecht lqi lampen"
+        type: entity-filter
+        # show_header_toggle: true
+        state_filter:
+          - operator: "!="
+            value: 255
+        entities:
+          - entity: sensor.lamp_badkamer_lqi
+            name: badkamer
+            secondary_info: last-changed
+          - entity: sensor.lamp_boven_2de_trap_huelight_lqi
+            name: boven trap
+            secondary_info: last-changed
+          - entity: sensor.lamp_gang_huelight_lqi
+            name: gang
+            secondary_info: last-changed
+          - entity: sensor.lamp_halletje_huelight_lqi
+            name: halletje
+            secondary_info: last-changed
+          - entity: sensor.lamp_keuken_lqi
+            name: keuken
+            secondary_info: last-changed
+          - entity: sensor.lamp_overloop_lqi
+            name: overloop
+            secondary_info: last-changed
+          - entity: sensor.lamp_slaapkamer_huelight_lqi
+            name: slaapkamer
+            secondary_info: last-changed
+          - entity: sensor.lamp_slaapkamer_naud_lqi
+            name: slaapkamer naud
+            secondary_info: last-changed
+          - entity: sensor.lamp_slaapkamer_stijn_huelight_lqi
+            name: slaapkamer stijn
+            secondary_info: last-changed
+          - entity: sensor.lamp_studeerkamer_huelight_lqi
+            name: studeerkamer
+            secondary_info: last-changed
+          - entity: sensor.lamp_voordeur_huelight_lqi
+            name: voordeur
+            secondary_info: last-changed
+          - entity: sensor.lamp_wasmachine_huelight_lqi
+            name: wasmachine
+            secondary_info: last-changed
+        show_empty: true
+
+      - title: zigbee rssi signal temperatuursensoren
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.00158d00027257cd_weather_slaapkamer_naud_rssi
+            name: slaapkamer naus
+          - entity: sensor.00158d000a833b95_weather_studeerkamer_rssi
+            name: studeerkamer
+          - entity: sensor.00158d000a83a3ae_weather_halletje_rssi
+            name: halletje
+          - entity: sensor.00158d000a83bb5a_weather_overloop_rssi
+            name: overloop
+          - entity: sensor.00158d000a83e4af_weather_slaapkamer_naud_verwarming_rssi
+            name: verwarming naud
+          - entity: sensor.158d000231046d_weather_studeerkamer_zoek_rssi
+            name: vliering
+          - entity: sensor.158d000238fcc1_weather_keuken_rssi
+            name: keuken
+          - entity: sensor.158d000273424b_weather_schuur_rssi
+            name: schuur
+          - entity: sensor.158d000273d342_weather_slaapkamer_rssi
+            name: slaapkamer
+          - entity: sensor.158d00027725d7_weather_slaapkamer_stijn_rssi
+            name: slaapkamer stijn
+          - entity: sensor.158d0002789adf_weather_woonkamer_rssi
+            name: woonkamer
+          - entity: sensor.158d00036b1a7f_weather_badkamer_rssi
+            name: badkamer
+          - entity: sensor.158d00036b2087_weather_voordeur_buiten_rssi
+            name: voordeur
+
+      - title: zigbee rssi signal bewegingsensoren
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d00047be924_motion_schuur_tuin_rssi
+            name: tuin
+          - entity: sensor.158d00046608d2_motion_schuur_steeg_rssi
+            name: steeg
+          - entity: sensor.158d00029a5cd2_motion_studeerkamer_rssi
+            name: studeerkamer
+          - entity: sensor.158d0002e8d2f1_motion_voordeur_buiten_rssi
+            name: voordeur
+          - entity: sensor.158d000313cbfb_motion_halletje_rssi
+            name: halletje
+          - entity: sensor.158d000319c29f_motion_gang_rssi
+            name: gang
+          - entity: sensor.158d00046603e3_motion_keuken_rssi
+            name: keuken
+          - entity: sensor.158d00046663d4_motion_boven_aan_de_trap_rssi
+            name: boven trap
+
+      - title: zigbee rssi signal overige sensoren
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d00025ed544_magnet_studeerkamer_raam_rechts_rssi
+            name: raamsensor rechts
+          - entity: sensor.158d0002e24f96_magnet_studeerkamer_raam_links_rssi
+            name: raamsensor links
+          - entity: sensor.158d0002b78209_vibaration_ijskast_rssi
+            name: ijskast
+          - entity: sensor.heiman_cosensor_em_cv_ketel_rssi
+            name: co2-sensor cv-ketel
+          - entity: sensor.heimans_smokesensor_ef_3_0_gang_rssi
+            name: rooksensor gang
+          - entity: sensor.heimans_smokesensor_ef_3_0_keuken_rssi
+            name: rooksensor keuken
+          - entity: sensor.heimans_smokesensor_ef_3_0_overloop_rssi
+            name: rooksensor overloop
+          - entity: sensor.licht_sensor_woonkamer_rssi
+            name: lichtsensor woonkamer
+          - entity: sensor.router_1_rssi
+            name: router1
+          - entity: sensor.router_2_rssi
+            name: router2
+          - entity: sensor.router_3_rssi
+            name: router3
+          - entity: sensor.stekkerblok_kamer_stijn_rssi
+            name: stekkerblok stijn
+
+      - title: zigbee rssi signal lampen
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.lamp_badkamer_rssi
+            name: badkamer
+          - entity: sensor.lamp_boven_2de_trap_huelight_rssi
+            name: boven trap
+          - entity: sensor.lamp_gang_huelight_rssi
+            name: gang
+          - entity: sensor.lamp_halletje_huelight_rssi
+            name: halletje
+          - entity: sensor.lamp_keuken_rssi
+            name: keuken
+          - entity: sensor.lamp_overloop_rssi
+            name: overloop
+          - entity: sensor.lamp_slaapkamer_huelight_rssi
+            name: slaapkamer
+          - entity: sensor.lamp_slaapkamer_naud_rssi
+            name: slaapkamer naud
+          - entity: sensor.lamp_slaapkamer_stijn_huelight_rssi
+            name: slaapkamer stijn
+          - entity: sensor.lamp_studeerkamer_huelight_rssi
+            name: studeerkamer
+          - entity: sensor.lamp_voordeur_huelight_rssi
+            name: voordeur
+          - entity: sensor.lamp_wasmachine_huelight_rssi
+            name: wasmachine
+
+      - title: zigbee lqi signal temperatuursensoren
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.00158d00027257cd_weather_slaapkamer_naud_lqi
+            name: slaapkamer naus
+          - entity: sensor.00158d000a833b95_weather_studeerkamer_lqi
+            name: studeerkamer
+          - entity: sensor.00158d000a83a3ae_weather_halletje_lqi
+            name: halletje
+          - entity: sensor.00158d000a83bb5a_weather_overloop_lqi
+            name: overloop
+          - entity: sensor.00158d000a83e4af_weather_slaapkamer_naud_verwarming_lqi
+            name: verwarming naud
+          - entity: sensor.158d000231046d_weather_studeerkamer_zoek_lqi
+            name: vliering
+          - entity: sensor.158d000238fcc1_weather_keuken_lqi
+            name: keuken
+          - entity: sensor.158d000273424b_weather_schuur_lqi
+            name: schuur
+          - entity: sensor.158d000273d342_weather_slaapkamer_lqi
+            name: slaapkamer
+          - entity: sensor.158d00027725d7_weather_slaapkamer_stijn_lqi
+            name: slaapkamer stijn
+          - entity: sensor.158d0002789adf_weather_woonkamer_lqi
+            name: woonkamer
+          - entity: sensor.158d00036b1a7f_weather_badkamer_lqi
+            name: badkamer
+          - entity: sensor.158d00036b2087_weather_voordeur_buiten_lqi
+            name: voordeur
+
+      - title: zigbee lqi signal bewegingsensoren
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d00047be924_motion_schuur_tuin_lqi
+            name: tuin
+          - entity: sensor.158d00046608d2_motion_schuur_steeg_lqi
+            name: steeg
+          - entity: sensor.158d00029a5cd2_motion_studeerkamer_lqi
+            name: studeerkamer
+          - entity: sensor.158d0002e8d2f1_motion_voordeur_buiten_lqi
+            name: voordeur
+          - entity: sensor.158d000313cbfb_motion_halletje_lqi
+            name: halletje
+          - entity: sensor.158d000319c29f_motion_gang_lqi
+            name: gang
+          - entity: sensor.158d00046603e3_motion_keuken_lqi
+            name: keuken
+          - entity: sensor.158d00046663d4_motion_boven_aan_de_trap_lqi
+            name: boven trap
+
+      - title: zigbee lqi signal overige sensoren
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d00025ed544_magnet_studeerkamer_raam_rechts_lqi
+            name: raamsensor rechts
+          - entity: sensor.158d0002e24f96_magnet_studeerkamer_raam_links_lqi
+            name: raamsensor links
+          - entity: sensor.158d0002b78209_vibaration_ijskast_lqi
+            name: ijskast
+          - entity: sensor.heiman_cosensor_em_cv_ketel_lqi
+            name: co2-sensor cv-ketel
+          - entity: sensor.heimans_smokesensor_ef_3_0_gang_lqi
+            name: rooksensor gang
+          - entity: sensor.heimans_smokesensor_ef_3_0_keuken_lqi
+            name: rooksensor keuken
+          - entity: sensor.heimans_smokesensor_ef_3_0_overloop_lqi
+            name: rooksensor overloop
+          - entity: sensor.licht_sensor_woonkamer_lqi
+            name: lichtsensor woonkamer
+          - entity: sensor.router_1_lqi
+            name: router1
+          - entity: sensor.router_2_lqi
+            name: router2
+          - entity: sensor.router_3_lqi
+            name: router3
+          - entity: sensor.stekkerblok_kamer_stijn_lqi
+            name: stekkerblok stijn
+
+      - title: zigbee lqi signal lampen
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.lamp_badkamer_lqi
+            name: badkamer
+          - entity: sensor.lamp_boven_2de_trap_huelight_lqi
+            name: boven trap
+          - entity: sensor.lamp_gang_huelight_lqi
+            name: gang
+          - entity: sensor.lamp_halletje_huelight_lqi
+            name: halletje
+          - entity: sensor.lamp_keuken_lqi
+            name: keuken
+          - entity: sensor.lamp_overloop_lqi
+            name: overloop
+          - entity: sensor.lamp_slaapkamer_huelight_lqi
+            name: slaapkamer
+          - entity: sensor.lamp_slaapkamer_naud_lqi
+            name: slaapkamer naud
+          - entity: sensor.lamp_slaapkamer_stijn_huelight_lqi
+            name: slaapkamer stijn
+          - entity: sensor.lamp_studeerkamer_huelight_lqi
+            name: studeerkamer
+          - entity: sensor.lamp_voordeur_huelight_lqi
+            name: voordeur
+          - entity: sensor.lamp_wasmachine_huelight_lqi
+            name: wasmachine
+
+      - title: zigbee lqi signal bewegingsensoren last seen
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.158d00047be924_motion_schuur_tuin_lqi
+            name: tuin
+          - entity: sensor.158d00046608d2_motion_schuur_steeg_lqi
+            name: steeg
+          - entity: sensor.158d00029a5cd2_motion_studeerkamer_lqi
+            name: studeerkamer
+          - entity: sensor.158d0002e8d2f1_motion_voordeur_buiten_lqi
+            name: voordeur
+          - entity: sensor.158d000313cbfb_motion_halletje_lqi
+            name: halletje
+          - entity: sensor.158d000319c29f_motion_gang_lqi
+            name: gang
+          - entity: sensor.158d00046603e3_motion_keuken_lqi
+            name: keuken
+          - entity: sensor.158d00046663d4_motion_boven_aan_de_trap_lqi
+            name: boven trap
+
+      - title: wifi signal
+        type: history-graph
+        hours_to_show: 48
+        entities:
+          - entity: sensor.esp32_cam_esp32_cam_wifi_signal
+            name: esp32-cam
+          - entity: sensor.nodemcu_v3_nodemcu_v3_wifi_signal
+            name: nodemcu-v3
+          - entity: sensor.sonoffpowr2bank_sonoffpowr2bank_wifi_signal
+            name: sonoff pow r2 bank
+          - entity: sensor.sonoffpowr2tv_sonoffpowr2tv_wifi_signal
+            name: sonoff pow r2 tv
+
+  - title: home assistant
+    icon: mdi:server
+    cards:
+      - title: cpu gebruik
+        type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: sensor.mariadb_cpu_percentage
+            name: mariadb
+          - entity: sensor.duck_dns_cpu_percent
+            name: duckdns
+          - entity: sensor.esphome_cpu_percentage
+            name: esphome
+          - entity: sensor.home_assistant_core_cpu_percent
+            name: HA core
+          - entity: sensor.home_assistant_google_drive_backup_cpu_percentage
+            name: backup
+          - entity: sensor.home_assistant_supervisor_cpu_percent
+            name: HA supervisor
+          - entity: sensor.matter_server_cpu_percent
+            name: matter
+          - entity: sensor.nginx_home_assistant_ssl_proxy_cpu_percent
+            name: nginx
+          - entity: sensor.silicon_labs_multiprotocol_cpu_percent
+            name: silicon labs
+          - entity: sensor.studio_code_server_cpu_percentage
+            name: vscode
+          - entity: sensor.terminal_ssh_cpu_percent
+            name: terminal
+          - entity: sensor.promtail_cpu_percentage
+            name: protail
+          - entity: sensor.influxdb_cpu_percentage
+            name: influxdb
+          - entity: sensor.pi_hole_cpu_percentage
+            name: pi-hole
+          - entity: sensor.linkding_cpu_percentage
+            name: linkding
+
+      - title: geheugen gebruik
+        type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: sensor.mariadb_geheugenpercentage
+            name: mariadb
+          - entity: sensor.silicon_labs_multiprotocol_memory_percent
+            name: silicon lab
+          - entity: sensor.studio_code_server_geheugen_percentage
+            name: vscode
+          - entity: sensor.terminal_ssh_memory_percent
+            name: terminal
+          - entity: sensor.duck_dns_memory_percent
+            name: duckdns
+          - entity: sensor.nginx_home_assistant_ssl_proxy_memory_percent
+            name: nginx
+          - entity: sensor.home_assistant_core_memory_percent
+            name: HA core
+          - entity: sensor.home_assistant_supervisor_memory_percent
+            name: HA supervisor
+          - entity: sensor.matter_server_memory_percent
+            name: matter
+          - entity: sensor.influxdb_geheugenpercentage
+            name: influx
+          - entity: sensor.promtail_geheugenpercentage
+            name: promtail
+          - entity: sensor.pi_hole_geheugenpercentage
+            name: pi-hole
+          - entity: sensor.linkding_geheugenpercentage
+            name: linkding
+
+      - title: disk opslag
+        type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: sensor.mariadb_size
+            name: mariadb
+          - entity: sensor.home_assistant_host_disk_used
+            name: used
+          - entity: sensor.home_assistant_host_disk_total
+            name: total
+          - entity: sensor.home_assistant_host_disk_free
+            name: free

@@ -1,0 +1,27 @@
+
+# You can whitelist files/folders with !, those will not be ignored.
+# Everything that starts with a / are for root elements
+
+# ignore
+/deps/
+/custom_components/
+/esphome/secrets.yaml
+/tts/
+/zb_ota
+/tb_ota/
+/zippy_ota
+/zippy_ota/
+/zigbee*
+/home-assistant_v2.db
+/home-assistant_v2.* # Exclude Home Assistant history-related database. Make sure to enable git LFS if you don't exclude that, since those files can go easily over 100MB
+/home-assistant.log*
+/secrets.yaml
+/.storage
+/.ssh/
+*secrets*
+*.log*
+
+
+# keep
+!.gitignore
+!.HA_VERSION

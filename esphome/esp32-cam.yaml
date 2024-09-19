@@ -1,0 +1,172 @@
+# device specific settings
+substitutions:
+  device_name: esp32-cam
+  friendly_name: Esp32-cam
+  device_ip: 192.168.11.125
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  platform: ESP32
+  board: esp32dev
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret encryption_key
+  services:  # change camera parameters on-the-fly
+  - service: camera_set_param
+    variables:
+      name: string
+      value: int
+      data: string
+      state: bool
+    then:
+      - lambda: |-
+          bool state_return = false;
+          uint8_t value8 = static_cast<uint8_t>(value);
+          if (("verticalflip" == name) && ((state == true ) || (state == false)) ) {  id(espcam).set_vertical_flip(state); state_return = true; }
+          if (("horizontalmirror" == name) && ((state == true ) || (state == false)) ) {  id(espcam).set_horizontal_mirror(state); state_return = true; }
+          if (("resolution" == name) && (data == "160X120")) {  id(espcam).set_frame_size(esphome::esp32_camera::ESP32CameraFrameSize::ESP32_CAMERA_SIZE_160X120); state_return = true; }
+          if (("resolution" == name) && (data == "320X240")) {  id(espcam).set_frame_size(esphome::esp32_camera::ESP32CameraFrameSize::ESP32_CAMERA_SIZE_320X240); state_return = true; }
+          if (("resolution" == name) && (data == "640X480")) {  id(espcam).set_frame_size(esphome::esp32_camera::ESP32CameraFrameSize::ESP32_CAMERA_SIZE_640X480); state_return = true; }
+          if (("resolution" == name) && (data == "800X600")) {  id(espcam).set_frame_size(esphome::esp32_camera::ESP32CameraFrameSize::ESP32_CAMERA_SIZE_800X600); state_return = true; }
+          if (("resolution" == name) && (data == "1024X768")) {  id(espcam).set_frame_size(esphome::esp32_camera::ESP32CameraFrameSize::ESP32_CAMERA_SIZE_1024X768); state_return = true; }
+          if (("resolution" == name) && (data == "1280X1024")) {  id(espcam).set_frame_size(esphome::esp32_camera::ESP32CameraFrameSize::ESP32_CAMERA_SIZE_1280X1024); state_return = true; }
+          if (("resolution" == name) && (data == "1600X1200")) {  id(espcam).set_frame_size(esphome::esp32_camera::ESP32CameraFrameSize::ESP32_CAMERA_SIZE_1600X1200); state_return = true; }
+          if (("resolution" == name) && (data == "1920X1080")) {  id(espcam).set_frame_size(esphome::esp32_camera::ESP32CameraFrameSize::ESP32_CAMERA_SIZE_1920X1080); state_return = true; }
+          if (("quality" == name) && (value >= 10U) && (value <= 63U)) { id(espcam).set_jpeg_quality(value); state_return = true; ESP_LOGD("custom", "value is: %i", value);}
+          if (("contrast" == name) && (value >= -2) && (value <= 2)) { id(espcam).set_contrast(value); state_return = true; }
+          if (("brightness" == name) && (value >= -2) && (value <= 2)) { id(espcam).set_brightness(value); state_return = true; }
+          if (("saturation" == name) && (value >= -2) && (value <= 2)) { id(espcam).set_saturation(value); state_return = true; }
+          if (("special_effect" == name) && (value >= 0U) && (value <= 6U)) { id(espcam).set_special_effect((esphome::esp32_camera::ESP32SpecialEffect)value); state_return = true; }
+          if (("aec_mode" == name) && (value >= 0U) && (value <= 1U)) { id(espcam).set_aec_mode((esphome::esp32_camera::ESP32GainControlMode)value); state_return = true; }
+          if (("aec2" == name) && (value >= 0U) && (value <= 1U)) { id(espcam).set_aec2(value); state_return = true; }
+          if (("ae_level" == name) && (value >= -2) && (value <= 2)) { id(espcam).set_ae_level(value); state_return = true; }
+          if (("aec_value" == name) && (value >= 0U) && (value <= 1200U)) { id(espcam).set_aec_value(value); state_return = true; }
+          if (("agc_mode" == name) && (value >= 0U) && (value <= 1U)) { id(espcam).set_agc_mode((esphome::esp32_camera::ESP32GainControlMode)value); state_return = true; }
+          if (("agc_value" == name) && (value >= 0U) && (value <= 30U)) { id(espcam).set_agc_value(value); state_return = true; }
+          if (("agc_gain_ceiling" == name) && (value >= 0U) && (value <= 6U)) { id(espcam).set_agc_gain_ceiling((esphome::esp32_camera::ESP32AgcGainCeiling)value); state_return = true; }
+          if (("wb_mode" == name) && (value >= 0U) && (value <= 4U)) { id(espcam).set_wb_mode((esphome::esp32_camera::ESP32WhiteBalanceMode)value); state_return = true; }
+          if (("test_pattern" == name) && (value >= 0U) && (value <= 1U)) { id(espcam).set_test_pattern(value); state_return = true; }
+          if (true == state_return) {
+            id(espcam).update_camera_parameters();
+          }
+          else {
+            ESP_LOGW("esp32_camera_set_param", "Error in name or data range");
+          }
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: ${device_ip}
+    gateway: 192.168.11.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: '${device_name}_Fallback_Hotspot'
+    password: !secret wifi_password
+
+web_server:
+  auth:
+    username: admin
+    password: !secret webserver_password
+
+captive_portal:
+
+# wifi signal and uptime
+sensor:
+  - platform: wifi_signal
+    name: '${device_name}_wifi_signal'
+    update_interval: 60s
+  - platform: uptime
+    name: '${device_name}_uptime'
+
+# firmware version
+text_sensor:
+  - platform: version
+    name: '${device_name}_version'
+     
+# camera     
+esp32_camera:
+  id: espcam
+  external_clock:
+    pin: GPIO0 
+    frequency: 20MHz
+  i2c_pins:
+    sda: GPIO26
+    scl: GPIO27
+  data_pins: [GPIO5, GPIO18, GPIO19, GPIO21, GPIO36, GPIO39, GPIO34, GPIO35]
+  vsync_pin: GPIO25
+  href_pin: GPIO23
+  pixel_clock_pin: GPIO22
+  power_down_pin: GPIO32
+  name: ${device_name} security
+# Image settings
+  max_framerate: 1.0fps
+  resolution: FHD
+  jpeg_quality: 50
+  contrast: 2
+  brightness: 2
+  saturation: 2
+  idle_framerate: 0.2fps
+  vertical_flip: false
+  horizontal_mirror: false
+  special_effect: none
+  # exposure settings
+  aec_mode: auto
+  aec2: false
+  ae_level: 0
+  aec_value: 300
+  # gain settings
+  agc_mode: auto
+  agc_gain_ceiling: 2x
+  agc_value: 0
+  # white balance setting
+  wb_mode: auto
+
+# Lights
+output:
+  # white LED
+  - platform: gpio
+    pin: GPIO4
+    id: gpio_4
+  # red status LED
+  - platform: gpio
+    pin:
+      number: GPIO33
+      inverted: True
+    id: gpio_33
+
+light:
+  - platform: binary
+    output: gpio_4
+    name: ${device_name} light
+  - platform: binary
+    output: gpio_33
+    name: ${device_name} redled
+
+# Example configuration entry
+esp32_camera_web_server:
+  - port: 8080
+    mode: stream
+  - port: 8081
+    mode: snapshot
+
+switch:
+  - platform: restart
+    name: esp-cam restart
+
+binary_sensor:
+  - platform: status
+    name: esp-cam status

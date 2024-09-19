@@ -1,0 +1,149 @@
+# device specific settings
+substitutions:
+  device_name: smart-doorbell
+  friendly_name: Smart Doorbell
+  device_ip: 192.168.11.128
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  project:
+    name: zuidwijk.smart-doorbell
+    version: "2.0"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: ${device_ip}
+    gateway: 192.168.11.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: '${device_name}_Fallback_Hotspot'
+    password: !secret wifi_password
+
+captive_portal:
+
+# improv_serial:
+
+#esp32_improv:
+#  authorizer: none
+
+#esp32_ble_tracker:
+#  scan_parameters:
+#    interval: 1100ms
+#    window: 1100ms
+#    active: true
+
+# bluetooth_proxy:
+#   active: true
+
+web_server:
+  port: 80
+  auth:
+    username: admin
+    password: !secret webserver_password
+
+dashboard_import:
+  package_import_url: github://zuidwijk/esphome-doorbell/smart-doorbell2.yaml@main
+  import_full_config: true
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+ 
+text_sensor:
+  - platform: version
+    name: Doorbell ESPHome Version
+  - platform: wifi_info
+    ip_address:
+      name: ${device_ip}
+    ssid:
+      name: !secret wifi_ssid
+    bssid:
+      name: !secret wifi_ssid
+ 
+sensor:
+  - platform: uptime
+    name: Doorbell Uptime
+  - platform: wifi_signal
+    name: Doorbell WiFi Signal
+    update_interval: 60s
+ 
+globals:
+  - id: chime
+    type: bool
+    restore_value: true
+    initial_value: 'true'
+ 
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO5
+      inverted: false
+    name: "Doorbell Relay"
+    id: relay
+    internal: true
+    icon: mdi:alarm-bell
+  - platform: restart
+    name: "Doorbell Restart"
+  - platform: template
+    name: Doorbell Chime Active
+    id: chime_active
+    restore_mode: ALWAYS_ON
+    turn_on_action:
+      - globals.set:
+          id: chime
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: chime
+          value: 'false'
+    lambda: |-
+      return id(chime);
+     
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO4
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Doorbell"
+    filters:
+      # Small filter, to debounce the button press.
+      - delayed_on: 25ms
+      - delayed_off: 25ms
+    on_press:
+      # Only turn on the chime when it is active.
+      then:
+        if:
+          condition:
+            - switch.is_on: chime_active
+          then:
+            - switch.turn_on: relay
+    on_release:
+      # On release, turn of the chime.
+      - switch.turn_off: relay        
+ 
+  - platform: status
+    name: "Status Doorbell"
