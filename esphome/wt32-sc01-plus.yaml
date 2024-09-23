@@ -3,7 +3,7 @@
 # 3.5 inch 320x480, driver ST7796UI, interface MCU8080 8Bit, color RGB565, ILI9488 controller 
 # single touch capacitive FT6336U I2S
 # ESP32-S3 model ESP32-WROVER-B, WiFi + BT + BLE MCU module, 4MB SPI flash and 8MB PSRAM
-# https://www.marutsu.co.jp/contents/shop/marutsu/datasheet/khe_WT32-SC01-PLUS.pdf
+# https://www.marutsu.co.jp/contents/shop/marutsu/datasheet/khe_WT32-SC01-PLUS.pdf-----
 # https://esphome.io/components/touchscreen/ft63x6.html
 # https://www.esp32.com/viewtopic.php?t=39219
 # https://github.com/esphome/esphome/pull/6537 Implement i80 bus for ili9xxx displays
@@ -33,6 +33,9 @@ esp32:
       CONFIG_ESP32S3_DATA_CACHE_64KB: y
       CONFIG_SPIRAM_FETCH_INSTRUCTIONS: y
       CONFIG_SPIRAM_RODATA: y
+      CONFIG_ESPTOOLPY_FLASHSIZE_16MB: y
+      CONFIG_ESPTOOLPY_FLASHFREQ_40M: y
+      CONFIG_ESPTOOLPY_FLASHMODE_DIO: y
 
 # Enable logging
 logger:
@@ -66,6 +69,36 @@ web_server:
   auth:
     username: admin
     password: !secret webserver_password
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+sensor:
+  - platform: wifi_signal
+    name: '${device_name}_wifi_signal'
+    update_interval: 60s
+  - platform: uptime
+    name: '${device_name}_uptime'
+ 
+text_sensor:
+  - platform: version
+    name: '${device_name}_version'
+  - platform: wifi_info
+    ip_address:
+      name: ${device_ip}
+    ssid:
+      name: !secret wifi_ssid
+    bssid:
+      name: !secret wifi_ssid
+
+binary_sensor:
+  - platform: status
+    name: "${device_name}_Status"
+
+switch:
+  - platform: restart
+    name: "${device_name}_Restart"
 
 external_components:
   - source: github://pr#6537
@@ -115,6 +148,11 @@ touchscreen:
 psram:
   speed: 80MHz
 
+font:
+  - file: "fonts/ComicSansMS3.ttf"
+    id: my_font
+    size: 12
+
 display:
   - platform: ili9xxx
     bus_type: i80
@@ -135,3 +173,91 @@ display:
     update_interval: never
 
 lvgl:
+  theme:
+    label:
+      text_font: my_font # set all your labels to use your custom defined font
+    button:
+      bg_color: 0x2F8CD8
+      bg_grad_color: 0x005782
+      bg_grad_dir: VER
+      bg_opa: COVER
+      border_color: 0x0077b3
+      border_width: 1
+      text_color: 0xFFFFFF
+      pressed: # set some button colors to be different in pressed state
+        bg_color: 0x006699
+        bg_grad_color: 0x00334d
+      checked: # set some button colors to be different in checked state
+        bg_color: 0x1d5f96
+        bg_grad_color: 0x03324A
+        text_color: 0xfff300
+    buttonmatrix:
+      bg_opa: TRANSP
+      border_color: 0x0077b3
+      border_width: 0
+      text_color: 0xFFFFFF
+      pad_all: 0
+      items: # set all your buttonmatrix buttons to use your custom defined styles and font
+        bg_color: 0x2F8CD8
+        bg_grad_color: 0x005782
+        bg_grad_dir: VER
+        bg_opa: COVER
+        border_color: 0x0077b3
+        border_width: 1
+        text_color: 0xFFFFFF
+        text_font: my_font
+        pressed:
+          bg_color: 0x006699
+          bg_grad_color: 0x00334d
+        checked:
+          bg_color: 0x1d5f96
+          bg_grad_color: 0x03324A
+          text_color: 0x005580
+    switch:
+      bg_color: 0xC0C0C0
+      bg_grad_color: 0xb0b0b0
+      bg_grad_dir: VER
+      bg_opa: COVER
+      checked:
+        bg_color: 0x1d5f96
+        bg_grad_color: 0x03324A
+        bg_grad_dir: VER
+        bg_opa: COVER
+      knob:
+        bg_color: 0xFFFFFF
+        bg_grad_color: 0xC0C0C0
+        bg_grad_dir: VER
+        bg_opa: COVER
+    slider:
+      border_width: 1
+      border_opa: 15%
+      bg_color: 0xcccaca
+      bg_opa: 15%
+      indicator:
+        bg_color: 0x1d5f96
+        bg_grad_color: 0x03324A
+        bg_grad_dir: VER
+        bg_opa: COVER
+      knob:
+        bg_color: 0x2F8CD8
+        bg_grad_color: 0x005782
+        bg_grad_dir: VER
+        bg_opa: COVER
+        border_color: 0x0077b3
+        border_width: 1
+        text_color: 0xFFFFFF
+  style_definitions:
+    - id: header_footer
+      bg_color: 0x2F8CD8
+      bg_grad_color: 0x005782
+      bg_grad_dir: VER
+      bg_opa: COVER
+      border_opa: TRANSP
+      radius: 0
+      pad_all: 0
+      pad_row: 0
+      pad_column: 0
+      border_color: 0x0077b3
+      text_color: 0xFFFFFF
+      width: 100%
+      height: 30
