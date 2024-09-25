@@ -393,14 +393,11 @@ binary_sensor:
                   value: '"automation.3_kids_heating_on"'    
     
    
+  
 #-------------------------------------------
 # Internal outputs
 #-------------------------------------------
-   
-#-------------------------------------------
-# Internal outputs
-#-------------------------------------------
-output:   
+# output:   
   # # Backlight LED
   # - platform: ledc
   #   pin: GPIO38
@@ -414,7 +411,7 @@ output:
 #-------------------------------------------
 # LIGHTS
 #-------------------------------------------
-light:
+# light:
   # - platform: monochromatic
   #   output: GPIO38
   #   name: Backlight
@@ -576,172 +573,6 @@ font:
     size: 90
     bpp: 4          
 
-#-------------------------------------------
-# LIGHTS
-#-------------------------------------------
-light:
-  - platform: monochromatic
-    output: GPIO38
-    name: Backlight
-    id: backlight
-    restore_mode: ALWAYS_ON
-  
-  - platform: binary
-    name: "Panel Switch"
-    id: panel_switch
-    output: panel_output
-    
-#-------------------------------------------
-# Graphicsd and Fonts
-#-------------------------------------------
-image:
-  #- file: 'images/back1.png'
-  #  id: back1
-  #  type: RGB565
-  
-  - file: 'images/back2.png'
-    id: back2
-    type: RGB565
-  
-  #- file: 'images/back3.png'
-  #  id: back3
-  #  type: RGB565
-  
-  #- file: 'images/back4.png'
-  #  id: back4
-  #  type: RGB565
-  
-  #- file: 'images/back5.png'
-  #  id: back5
-  #  type: RGB565
-  
-  - file: 'images/back6.png'
-    id: back6
-    type: RGB565
-  
-  - file: 'images/back7.png'
-    id: back7
-    type: RGB565
-  
-  - file: 'images/ha_logo.png'
-    id: boot_logo
-    resize: 200x200
-    type: RGB565
-    use_transparency: true
-    
-font:
-  - file: "gfonts://Roboto"
-    id: roboto24
-    size: 24
-    bpp: 4
-    extras:
-      - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
-        glyphs: [
-          "\U000F004B",
-          "\U0000f0ed",
-          "\U000F006E",
-          "\U000F012C",
-          "\U000F179B",
-          "\U000F0748",
-          "\U000F1A1B",
-          "\U000F02DC",
-          "\U000F0A02",
-          "\U000F035F",
-          "\U000F0156",
-          "\U000F0C5F", 
-          "\U000f0084",
-          "\U000f0091",
-          "\U000F050F", # Thermometer
-          $house_temp 
-          ]
-  - file: "gfonts://Roboto"
-    id: weather_icons
-    size: 110
-    bpp: 4
-    extras:
-      - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
-        glyphs: [
-          $cloudy,
-          $cloudyalert,
-          $cloudyarrowright,
-          $fog,
-          $hail,
-          $hazy,
-          $hurricane,
-          $lightning,
-          $lightningrainy,
-          $night,
-          $nightpartlycloudy,
-          $partlycloudy,
-          $partlylightning,
-          $partlyrainy,
-          $partlysnowy,
-          $partlysnowyrainy,
-          $pouring,
-          $rainy,
-          $snowy,
-          $snowyheavy,
-          $snowyrainy,
-          $sunny,
-          $sunnyalert,
-          $sunnyoff,
-          $sunset,
-          $sunsetdown,
-          $sunsetup,
-          $tornado,
-          $windy,
-          $windyvariant,
-          $happyface
-        ]
-
-  - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
-    id: light32
-    size: 32
-    bpp: 4
-    glyphs: [
-      "\U000F0335", # mdi-lightbulb
-      "\U000F0769", # mdi-ceiling-light
-      "\U000F08DD", # mdi-floor-lamp
-      "\U000F12BA", # mdi-string-lights
-      ]          
-      
-  - file: "gfonts://Roboto"
-    id: roboto40
-    size: 40
-    bpp: 4
-  
-  - file: "gfonts://Roboto"
-    id: btn_icons_font
-    size: 70
-    bpp: 4
-    extras:
-      - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
-        glyphs: [
-          $lightbulb,
-          $boiler_on,
-          $boiler_off,
-          $radiator,
-          $ceiling_light,
-          $house_temp
-        ]
-    
-  - file: "gfonts://Roboto"
-    id: btn_icons_font2
-    size: 50
-    bpp: 4
-    extras:
-      - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
-        glyphs: [
-          $lightbulb,
-          $house_temp
-        ]
-
-  - file: "gfonts://Roboto"
-    id: roboto90
-    size: 90
-    bpp: 4          
-
-
 switch:
   - platform: restart
     name: "${device_name}_Restart"
@@ -778,7 +609,6 @@ i80:
     - 15
   wr_pin: 47
   
-
 i2c:
   sda: 6
   scl: 5
@@ -832,11 +662,6 @@ script:
             id: backlight
       - lvgl.pause:
           show_snow: true
-
-# font:
-#   - file: "fonts/ComicSansMS3.ttf"
-#     id: my_font
-#     size: 12
 
 display:
   - platform: ili9xxx
