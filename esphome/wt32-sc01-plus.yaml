@@ -61,14 +61,17 @@ esphome:
   platformio_options:
     build_unflags: -Werror=all
     board_build.flash_mode: dio
+    board_build.flash_size: 16MB
+    board_build.partitions: "/config/esphome/custom_partitions.csv"
   on_boot:
     - delay: 5s
     - lvgl.widget.hide: boot_screen
     - delay: 30s
-    - script.execute: screen_light
+    # - script.execute: screen_light
 
 esp32:
   board: esp32-s3-devkitc-1
+  flash_size: 16MB
   framework:
     type: esp-idf
     sdkconfig_options:
@@ -79,6 +82,7 @@ esp32:
       CONFIG_ESPTOOLPY_FLASHSIZE_16MB: y
       CONFIG_ESPTOOLPY_FLASHFREQ_40M: y
       CONFIG_ESPTOOLPY_FLASHMODE_DIO: y
+
 
 # Enable logging
 logger:
@@ -98,7 +102,8 @@ api:
         condition:
           lambda: 'return (0 == client_info.find("Home Assistant "));'
         then:
-          - lvgl.widget.hide: lbl_has
+          - lvgl.widget.hide: lbl_hastatus
+          
 ota:
   - platform: esphome
     password: !secret ota_password
@@ -427,32 +432,9 @@ binary_sensor:
 # Graphicsd and Fonts
 #-------------------------------------------
 image:
-  #- file: 'images/back1.png'
-  #  id: back1
-  #  type: RGB565
   
-  - file: 'images/back2.png'
-    id: back2
-    type: RGB565
-  
-  #- file: 'images/back3.png'
-  #  id: back3
-  #  type: RGB565
-  
-  #- file: 'images/back4.png'
-  #  id: back4
-  #  type: RGB565
-  
-  #- file: 'images/back5.png'
-  #  id: back5
-  #  type: RGB565
-  
-  - file: 'images/back6.png'
-    id: back6
-    type: RGB565
-  
-  - file: 'images/back7.png'
-    id: back7
+  - file: 'images/back1.png'
+    id: back1
     type: RGB565
   
   - file: 'images/ha_logo.png'
@@ -467,7 +449,7 @@ font:
     size: 24
     bpp: 4
     extras:
-      - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
+      - file: 'fonts/ComicSansMS3.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
         glyphs: [
           "\U000F004B",
           "\U0000f0ed",
@@ -491,7 +473,7 @@ font:
     size: 110
     bpp: 4
     extras:
-      - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
+      - file: 'fonts/ComicSansMS3.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
         glyphs: [
           $cloudy,
           $cloudyalert,
@@ -526,7 +508,7 @@ font:
           $happyface
         ]
 
-  - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
+  - file: 'fonts/ComicSansMS3.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
     id: light32
     size: 32
     bpp: 4
@@ -547,7 +529,7 @@ font:
     size: 70
     bpp: 4
     extras:
-      - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
+      - file: 'fonts/ComicSansMS3.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
         glyphs: [
           $lightbulb,
           $boiler_on,
@@ -562,7 +544,7 @@ font:
     size: 50
     bpp: 4
     extras:
-      - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
+      - file: 'fonts/ComicSansMS3.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
         glyphs: [
           $lightbulb,
           $house_temp
@@ -635,39 +617,38 @@ touchscreen:
                 touch.x_raw,
                 touch.y_raw
                 );
-      - script.stop: screen_light
-      - script.execute: screen_light
+      # - script.stop: screen_light
+      # - script.execute: screen_light
 
-script:
-  - id: screen_light
-    mode: restart
-    then:
-      - lvgl.resume:
-      - light.turn_on:
-          id: backlight
-          brightness: 100%          
-          transition_length: 1s
-      - delay: 30s
-      - light.turn_on:
-            id: backlight
-            brightness: 50%
-            transition_length: 2s
-      - delay: 15min
-      - light.turn_on:
-            id: backlight
-            brightness: 35%
-            transition_length: 5s
-      - delay: 15min
-      - light.turn_off:
-            id: backlight
-      - lvgl.pause:
-          show_snow: true
+# script:
+#   - id: screen_light
+#     mode: restart
+#     then:
+#       - lvgl.resume:
+#       - light.turn_on:
+#           id: backlight
+#           brightness: 100%          
+#           transition_length: 1s
+#       - delay: 30s
+#       - light.turn_on:
+#             id: backlight
+#             brightness: 50%
+#             transition_length: 2s
+#       - delay: 15min
+#       - light.turn_on:
+#             id: backlight
+#             brightness: 35%
+#             transition_length: 5s
+#       - delay: 15min
+#       - light.turn_off:
+#             id: backlight
+#       - lvgl.pause:
+#           show_snow: true
 
 display:
   - platform: ili9xxx
     id: my_display
     bus_type: i80
-    id: w32_disp
     model: st7796
     dimensions:
       height: 320
@@ -901,7 +882,7 @@ lvgl:
       widgets:
         - image:
             align: CENTER
-            src: back7
+            src: back1
         - label:
             align: CENTER
             id: display_weather_icon
@@ -999,7 +980,7 @@ lvgl:
       widgets:
         - image:
             align: CENTER
-            src: back6
+            src: back1
         - obj: # a properly placed coontainer object for all these controls
             layout: # enable the GRID layout for the children widgets
               type: GRID # split the rows and the columns proportionally
