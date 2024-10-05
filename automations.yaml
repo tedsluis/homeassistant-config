@@ -10,11 +10,11 @@
 
 - id: "verwarming laag na 00:00"
   description: "Wanneer na 00:00 de verwarming aanstaat, dan laag zetten."
-  trigger:
-    platform: time
+  triggers:
+    trigger: time
     at: "00:00:00"
-  action:
-    - service: climate.set_temperature
+  actions:
+    - action: climate.set_temperature
       data:
         temperature: 12
       target:
@@ -24,12 +24,12 @@
 
 - id: "esp32-cam resolution"
   alias: "Resolution"
-  trigger:
-    platform: state
+  triggers:
+    trigger: state
     entity_id: input_select.esp32_cam_resolution
     to:
-  action:
-    - service: esphome.esp32_cam_camera_set_param
+  actions:
+    - action: esphome.esp32_cam_camera_set_param
       data:
         name: "resolution"
         value: 99
@@ -38,12 +38,12 @@
 
 - id: "esp32-cam Brightness"
   alias: "Brightness"
-  trigger:
-    platform: state
+  triggers:
+    trigger: state
     entity_id: input_number.esp32_cam_brightness
     to:
-  action:
-    - service: esphome.esp32_cam_camera_set_param
+  actions:
+    - action: esphome.esp32_cam_camera_set_param
       data:
         name: "brightness"
         value: "{{ states('input_number.esp32_cam_brightness') | int }}"
@@ -52,12 +52,12 @@
 
 - id: "esp32-cam Saturation"
   alias: "Saturation"
-  trigger:
-    platform: state
+  triggers:
+    trigger: state
     entity_id: input_number.esp32_cam_saturation
     to:
-  action:
-    - service: esphome.esp32_cam_camera_set_param
+  actions:
+    - action: esphome.esp32_cam_camera_set_param
       data:
         name: "saturation"
         value: "{{ states('input_number.esp32_cam_saturation') | int }}"
@@ -66,12 +66,12 @@
 
 - id: "esp32-cam Contrast"
   alias: "Contrast"
-  trigger:
-    platform: state
+  triggers:
+    trigger: state
     entity_id: input_number.esp32_cam_contrast
     to:
-  action:
-    - service: esphome.esp32_cam_camera_set_param
+  actions:
+    - action: esphome.esp32_cam_camera_set_param
       data:
         name: "contrast"
         value: "{{ states('input_number.esp32_cam_contrast') | int }}"
@@ -80,12 +80,12 @@
 
 - id: "esp32-cam vertical flip"
   alias: "VerticalFlip"
-  trigger:
-    platform: state
+  triggers:
+    trigger: state
     entity_id: input_boolean.esp32_cam_vertical_flip
     to:
-  action:
-    - service: esphome.esp32_cam_camera_set_param
+  actions:
+    - action: esphome.esp32_cam_camera_set_param
       data:
         name: "verticalflip"
         value: 99
@@ -94,12 +94,12 @@
 
 - id: "esp32-cam horizontal mirror"
   alias: "HorizontalMirror"
-  trigger:
-    platform: state
+  triggers:
+    trigger: state
     entity_id: input_boolean.esp32_cam_horizontal_mirror
     to:
-  action:
-    - service: esphome.esp32_cam_camera_set_param
+  actions:
+    - action: esphome.esp32_cam_camera_set_param
       data:
         name: "horizontalmirror"
         value: 99
@@ -108,12 +108,12 @@
 
 - id: "esp32-cam Quality"
   alias: "Quality"
-  trigger:
-    platform: state
+  triggers:
+    trigger: state
     entity_id: input_number.esp32_cam_jpeg_quality
     to:
-  action:
-    - service: esphome.esp32_cam_camera_set_param
+  actions:
+    - action: esphome.esp32_cam_camera_set_param
       data:
         name: "quality"
         value: "{{ states('input_number.esp32_cam_jpeg_quality') | int }}"
@@ -123,14 +123,14 @@
 - id: "smartdoorbell"
   alias: Notify Doorbell
   description: ""
-  trigger:
-    - platform: state
+  triggers:
+    - trigger: state
       entity_id: binary_sensor.smart_doorbell_doorbell
       from: "off"
       to: "on"
-  condition: []
-  action:
-    - service: notify.mobile_app_pixel_7a
+  conditions: []
+  actions:
+    - action: notify.mobile_app_pixel_7a
       data:
         title: Deurbel gaat.
         message: "{{ now().strftime('%A %H:%M:%S') }}: Er belt iemand aan de deur!"
@@ -140,25 +140,25 @@
           color: "green"
           importance: high
           vibrationPattern: "1000, 1000, 1000"
-    - service: light.turn_on
+    - action: light.turn_on
       data:
         flash: short
         entity_id: light.lamp_slaapkamer_stijn_huelight
 
 - id: "rookmelder-aan"
   alias: "rookmelder aan"
-  trigger:
-    - platform: state
+  triggers:
+    - trigger: state
       entity_id: binary_sensor.heiman_cosensor_em_cv_ketel_gas, binary_sensor.heimans_smokesensor_ef_3_0_gang_rook, binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook, binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
       from: "off"
       to: "on"
-  condition: []
-  action:
-    - service: notify.mobile_app_pixel_7a
+  conditions: []
+  actions:
+    - action: notify.mobile_app_pixel_7a
       data:
         title: rookmelder alarm!
         message: >-
-          {{ now().strftime("%A %H:%M:%S") }}: Rookmelder triggered. cv ketel: {{ states('binary_sensor.heiman_cosensor_em_cv_ketel_gas') }}, overloop: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_gang_rook') }}, keuken: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook') }}, overloop: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook') }}.
+          {{ now().strftime("%A %H:%M:%S") }}: Rookmelder triggersed. cv ketel: {{ states('binary_sensor.heiman_cosensor_em_cv_ketel_gas') }}, overloop: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_gang_rook') }}, keuken: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook') }}, overloop: {{ states('binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook') }}.
         data:
           channel: "rookmelder"
           color: "red"
@@ -168,14 +168,14 @@
 
 - id: "rookmelder-uit"
   alias: "rookmelder uit"
-  trigger:
-    - platform: state
+  triggers:
+    - trigger: state
       entity_id: binary_sensor.heiman_cosensor_em_cv_ketel_gas, binary_sensor.heimans_smokesensor_ef_3_0_gang_rook, binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook, binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
       from: "on"
       to: "off"
-  condition: []
-  action:
-    - service: notify.mobile_app_pixel_7a
+  conditions: []
+  actions:
+    - action: notify.mobile_app_pixel_7a
       data:
         title: rookmelder uit.
         message: >-
