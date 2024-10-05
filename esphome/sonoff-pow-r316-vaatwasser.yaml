@@ -3,7 +3,7 @@ substitutions:
   device_name: sonoff-pow-r316-vaatwasser
   friendly_name: Sonoff Pow R316 vaatwasser
   device_ip: 192.168.11.193
-  update_interval: 60s
+  update_interval: 10s
 
 esphome:
   name: ${device_name}
@@ -47,8 +47,12 @@ web_server:
     password: !secret webserver_password
  
 uart:
-  rx_pin: GPIO16
-  baud_rate: 4800
+  - rx_pin: GPIO3
+    baud_rate: 4800
+    id: dummy_uart  # Will end up being assigned UART0
+  - rx_pin: GPIO16
+    baud_rate: 4800
+    id: active_uart  # Will end up being assigned UART1
 
 time:
   - platform: homeassistant
@@ -56,32 +60,33 @@ time:
   
 sensor:
   - platform: cse7766
+    uart_id: active_uart # Select power meter's UART
     current:
-      name: ${friendly_name} Current
+      name: ${friendly_name}_current
       id: a_sensor
       filters:
         - throttle_average: ${update_interval}
     voltage:
-      name: ${friendly_name} Voltage
+      name: ${friendly_name}_voltage
       id: v_sensor
       filters:
         - throttle_average: ${update_interval}
     power:
-      name: ${friendly_name} Power
+      name: ${friendly_name}_power
       id: w_sensor
       filters:
         - throttle_average: ${update_interval}
       on_value_range:
-        - above: 4.0
+        - above: 2.0
           then:
             - light.turn_on: switch_led
-        - below: 3.0
+        - below: 1.0
           then:
             - light.turn_off: switch_led
     energy:
       filters:
         - throttle_average: ${update_interval}
-      name: ${friendly_name} Energy
+      name: ${friendly_name}_energy
       id: wh_sensor
   - platform: wifi_signal
     name: '${device_name}_wifi_signal'

@@ -1,3 +1,22 @@
+---
+
+# GPIO #	Component
+# GPIO00	Button 1
+# GPIO01	CSE7766 Tx
+# GPIO02	None
+# GPIO03	CSE7766 Rx
+# GPIO04	None
+# GPIO05	None
+# GPIO09	None
+# GPIO10	None
+# GPIO12	Relay_i 1
+# GPIO13	Led_i 1
+# GPIO14	None
+# GPIO15	User
+# GPIO16	User
+# GPIO17	User
+
+
 # device specific settings
 substitutions:
   device_name: sonoffpowr3boil
@@ -58,8 +77,6 @@ text_sensor:
       name: ${device_ip}
     ssid:
       name: !secret wifi_ssid
-    bssid:
-      name: !secret wifi_ssid
 
 sensor:
   - platform: uptime
@@ -67,11 +84,78 @@ sensor:
   - platform: wifi_signal
     name: '${device_name}_WiFi Signal'
     update_interval: 60s
+  - platform: uptime
+    name: '${device_name}_uptime'
+  - platform: cse7766
+    current:
+      name: '${device_name}_current'
+      filters:
+        - throttle_average: 10s
+    voltage:
+      name: '${device_name}_voltage'
+      filters:
+        - throttle_average: 10s
+    power:
+      name: '${device_name}_power'
+      filters:
+        - throttle_average: 10s
+      id: power
+      on_value_range:
+        - above: 2.0
+          then:
+            - light.turn_on: led
+        - below: 1.0
+          then:
+            - light.turn_off: led
+    energy:
+      name: '${device_name}_energy'
+      filters:
+        - throttle_average: 10s    
 
+# toggle button & state
 binary_sensor:
   - platform: status
     name: '${device_name}_Status'
+  - platform: gpio
+    name: '${device_name}_button'
+    id: button
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    on_press:
+      - switch.toggle: fakebutton
 
 switch:
   - platform: restart
     name: "${device_name}_Restart"
+  - platform: template
+    name: '${device_name}_switch'
+    optimistic: true
+    id: fakebutton
+    restore_mode: ALWAYS_ON
+    turn_on_action:
+    - switch.turn_on: relay
+    - light.turn_on: led
+    turn_off_action:
+    - switch.turn_off: relay
+    - light.turn_off: led
+  - platform: gpio
+    id: relay
+    pin: GPIO12
+    restore_mode: ALWAYS_ON
+
+# set blue led state
+output:
+  - platform: esp8266_pwm
+    id: pow_blue_led
+    pin:
+      number: GPIO13
+      inverted: True
+
+# blue led state
+light:
+  - platform: monochromatic
+    name: '${device_name}_bue_led'
+    output: pow_blue_led
+    id: led

@@ -1,3 +1,6 @@
+# https://www.zuidwijk.com/product/smart-doorbell/
+# https://github.com/zuidwijk/esphome-doorbell/blob/main/smart-doorbell2.yaml
+
 # device specific settings
 substitutions:
   device_name: smart-doorbell
