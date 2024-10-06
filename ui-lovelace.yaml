@@ -269,7 +269,39 @@ views:
             name: uptime
           - entity: sensor.sonoffpowr2bank_sonoffpowr2bank_version
             name: version
-
+      - title: sonoff pow r316 vaatwasser
+        type: entities
+        entities:
+          - entity: switch.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_relay_switch
+            name: switch
+          - entity: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
+            name: power
+          - entity: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_uptime
+            name: uptime
+          - entity: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_version
+            name: version
+      - title: sonoff pow r316 fornuis
+        type: entities
+        entities:
+          - entity: switch.sonoff_pow_r316_fornuis_sonoff_pow_r316_fornuis_relay_switch
+            name: switch
+          - entity: sensor.sonoff_pow_r316_fornuis_sonoff_pow_r316_fornuis_power
+            name: power
+          - entity: sensor.sonoff_pow_r316_fornuis_sonoff_pow_r316_fornuis_uptime
+            name: uptime
+          - entity: sensor.sonoff_pow_r316_fornuis_sonoff_pow_r316_fornuis_version
+            name: version
+      - title: sonoff pow r316 ijskast
+        type: entities
+        entities:
+          - entity: switch.sonoff_pow_r316_ijskast_sonoff_pow_r316_ijskast_relay_switch
+            name: switch
+          - entity: sensor.sonoff_pow_r316_ijskast_sonoff_pow_r316_ijskast_power
+            name: power
+          - entity: sensor.sonoff_pow_r316_ijskast_sonoff_pow_r316_ijskast_uptime
+            name: uptime
+          - entity: sensor.sonoff_pow_r316_ijskast_sonoff_pow_r316_ijskast_version
+            name: version
       - title: stekkerblok kamer Stijn
         type: entities
         entities:
@@ -395,7 +427,7 @@ views:
       - type: entities
         entities:
           - person.ted_sluis
-          
+
       - title: bel
         type: history-graph
         hours_to_show: 24
