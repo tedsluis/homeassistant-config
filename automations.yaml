@@ -1,4 +1,4 @@
-- id: '1696567289893'
+- id: "1696567289893"
   alias: notify_leaveing_zone
   description: Ted left the building...
   use_blueprint:
@@ -13,13 +13,13 @@
     trigger: time
     at: 00:00:00
   actions:
-  - action: climate.set_temperature
-    data:
-      temperature: 12
-    target:
-      area_id: living_room
-      device_id: d5a3987b1602c16b4a21ee296938315c
-      entity_id: climate.gtw_16
+    - action: climate.set_temperature
+      data:
+        temperature: 12
+      target:
+        area_id: living_room
+        device_id: d5a3987b1602c16b4a21ee296938315c
+        entity_id: climate.gtw_16
 - id: esp32-cam resolution
   alias: Resolution
   triggers:
@@ -27,12 +27,12 @@
     entity_id: input_select.esp32_cam_resolution
     to:
   actions:
-  - action: esphome.esp32_cam_camera_set_param
-    data:
-      name: resolution
-      value: 99
-      data: '{{ states(''input_select.esp32_cam_resolution'') }}'
-      state: false
+    - action: esphome.esp32_cam_camera_set_param
+      data:
+        name: resolution
+        value: 99
+        data: "{{ states('input_select.esp32_cam_resolution') }}"
+        state: false
 - id: esp32-cam Brightness
   alias: Brightness
   triggers:
@@ -40,12 +40,12 @@
     entity_id: input_number.esp32_cam_brightness
     to:
   actions:
-  - action: esphome.esp32_cam_camera_set_param
-    data:
-      name: brightness
-      value: '{{ states(''input_number.esp32_cam_brightness'') | int }}'
-      data: ''
-      state: false
+    - action: esphome.esp32_cam_camera_set_param
+      data:
+        name: brightness
+        value: "{{ states('input_number.esp32_cam_brightness') | int }}"
+        data: ""
+        state: false
 - id: esp32-cam Saturation
   alias: Saturation
   triggers:
@@ -53,12 +53,12 @@
     entity_id: input_number.esp32_cam_saturation
     to:
   actions:
-  - action: esphome.esp32_cam_camera_set_param
-    data:
-      name: saturation
-      value: '{{ states(''input_number.esp32_cam_saturation'') | int }}'
-      data: ''
-      state: false
+    - action: esphome.esp32_cam_camera_set_param
+      data:
+        name: saturation
+        value: "{{ states('input_number.esp32_cam_saturation') | int }}"
+        data: ""
+        state: false
 - id: esp32-cam Contrast
   alias: Contrast
   triggers:
@@ -66,12 +66,12 @@
     entity_id: input_number.esp32_cam_contrast
     to:
   actions:
-  - action: esphome.esp32_cam_camera_set_param
-    data:
-      name: contrast
-      value: '{{ states(''input_number.esp32_cam_contrast'') | int }}'
-      data: ''
-      state: false
+    - action: esphome.esp32_cam_camera_set_param
+      data:
+        name: contrast
+        value: "{{ states('input_number.esp32_cam_contrast') | int }}"
+        data: ""
+        state: false
 - id: esp32-cam vertical flip
   alias: VerticalFlip
   triggers:
@@ -79,12 +79,12 @@
     entity_id: input_boolean.esp32_cam_vertical_flip
     to:
   actions:
-  - action: esphome.esp32_cam_camera_set_param
-    data:
-      name: verticalflip
-      value: 99
-      data: ''
-      state: '{{ states(''input_boolean.esp32_cam_vertical_flip'') }}'
+    - action: esphome.esp32_cam_camera_set_param
+      data:
+        name: verticalflip
+        value: 99
+        data: ""
+        state: "{{ states('input_boolean.esp32_cam_vertical_flip') }}"
 - id: esp32-cam horizontal mirror
   alias: HorizontalMirror
   triggers:
@@ -92,12 +92,12 @@
     entity_id: input_boolean.esp32_cam_horizontal_mirror
     to:
   actions:
-  - action: esphome.esp32_cam_camera_set_param
-    data:
-      name: horizontalmirror
-      value: 99
-      data: ''
-      state: '{{ states(''input_boolean.esp32_cam_horizontal_mirror'') }}'
+    - action: esphome.esp32_cam_camera_set_param
+      data:
+        name: horizontalmirror
+        value: 99
+        data: ""
+        state: "{{ states('input_boolean.esp32_cam_horizontal_mirror') }}"
 - id: esp32-cam Quality
   alias: Quality
   triggers:
@@ -105,135 +105,185 @@
     entity_id: input_number.esp32_cam_jpeg_quality
     to:
   actions:
-  - action: esphome.esp32_cam_camera_set_param
-    data:
-      name: quality
-      value: '{{ states(''input_number.esp32_cam_jpeg_quality'') | int }}'
-      data: ''
-      state: false
+    - action: esphome.esp32_cam_camera_set_param
+      data:
+        name: quality
+        value: "{{ states('input_number.esp32_cam_jpeg_quality') | int }}"
+        data: ""
+        state: false
 - id: smartdoorbell
   alias: Notify Doorbell
-  description: ''
+  description: ""
   triggers:
-  - trigger: state
-    entity_id: binary_sensor.smart_doorbell_doorbell
-    from: 'off'
-    to: 'on'
+    - trigger: state
+      entity_id: binary_sensor.smart_doorbell_doorbell
+      from: "off"
+      to: "on"
   conditions: []
   actions:
-  - action: notify.mobile_app_pixel_7a
-    data:
-      title: Deurbel gaat.
-      message: '{{ now().strftime(''%A %H:%M:%S'') }}: Er belt iemand aan de deur!'
+    - action: notify.mobile_app_pixel_7a
       data:
-        channel: bel
-        notification_icon: mdi:bell
-        color: green
-        importance: high
-        vibrationPattern: 1000, 1000, 1000
-  - action: light.turn_on
-    data:
-      flash: short
-      entity_id: light.lamp_slaapkamer_stijn_huelight
+        title: Deurbel gaat.
+        message: "{{ now().strftime('%A %H:%M:%S') }}: Er belt iemand aan de deur!"
+        data:
+          channel: bel
+          notification_icon: mdi:bell
+          color: green
+          importance: high
+          vibrationPattern: 1000, 1000, 1000
+    - action: light.turn_on
+      data:
+        flash: short
+        entity_id: light.lamp_slaapkamer_stijn_huelight
 - id: rookmelder-aan
   alias: rookmelder aan
   triggers:
-  - trigger: state
-    entity_id:
-    - binary_sensor.heiman_cosensor_em_cv_ketel_gas
-    - binary_sensor.heimans_smokesensor_ef_3_0_gang_rook
-    - binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook
-    - binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
-    from: 'off'
-    to: 'on'
+    - trigger: state
+      entity_id:
+        - binary_sensor.heiman_cosensor_em_cv_ketel_gas
+        - binary_sensor.heimans_smokesensor_ef_3_0_gang_rook
+        - binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook
+        - binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
+      from: "off"
+      to: "on"
   conditions: []
   actions:
-  - action: notify.mobile_app_pixel_7a
-    data:
-      title: rookmelder alarm!
-      message: '{{ now().strftime("%A %H:%M:%S") }}: Rookmelder triggersed. cv ketel:
-        {{ states(''binary_sensor.heiman_cosensor_em_cv_ketel_gas'') }}, overloop:
-        {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_gang_rook'') }}, keuken:
-        {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook'') }}, overloop:
-        {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook'') }}.'
+    - action: notify.mobile_app_pixel_7a
       data:
-        channel: rookmelder
-        color: red
-        importance: high
-        vibrationPattern: 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000
-        notification_icon: mdi:fire-alert
+        title: rookmelder alarm!
+        message:
+          '{{ now().strftime("%A %H:%M:%S") }}: Rookmelder triggersed. cv ketel:
+          {{ states(''binary_sensor.heiman_cosensor_em_cv_ketel_gas'') }}, overloop:
+          {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_gang_rook'') }}, keuken:
+          {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook'') }}, overloop:
+          {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook'') }}.'
+        data:
+          channel: rookmelder
+          color: red
+          importance: high
+          vibrationPattern: 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000
+          notification_icon: mdi:fire-alert
 - id: rookmelder-uit
   alias: rookmelder uit
   triggers:
-  - trigger: state
-    entity_id: 
-    - binary_sensor.heiman_cosensor_em_cv_ketel_gas
-    - binary_sensor.heimans_smokesensor_ef_3_0_gang_rook
-    - binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook
-    - binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
-    from: 'on'
-    to: 'off'
+    - trigger: state
+      entity_id:
+        - binary_sensor.heiman_cosensor_em_cv_ketel_gas
+        - binary_sensor.heimans_smokesensor_ef_3_0_gang_rook
+        - binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook
+        - binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook
+      from: "on"
+      to: "off"
   conditions: []
   actions:
-  - action: notify.mobile_app_pixel_7a
-    data:
-      title: rookmelder uit.
-      message: '{{ now().strftime("%A %H:%M:%S") }}: Rookmelder ging uit. cv ketel:
-        {{ states(''binary_sensor.heiman_cosensor_em_cv_ketel_gas'') }}, overloop:
-        {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_gang_rook'') }}, keuken:
-        {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook'') }}, overloop:
-        {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook'') }}.'
+    - action: notify.mobile_app_pixel_7a
       data:
-        channel: rookmelder
-        color: red
-        importance: high
-        vibrationPattern: 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000
-        notification_icon: mdi:fire-alert
+        title: rookmelder uit.
+        message:
+          '{{ now().strftime("%A %H:%M:%S") }}: Rookmelder ging uit. cv ketel:
+          {{ states(''binary_sensor.heiman_cosensor_em_cv_ketel_gas'') }}, overloop:
+          {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_gang_rook'') }}, keuken:
+          {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_keuken_rook'') }}, overloop:
+          {{ states(''binary_sensor.heimans_smokesensor_ef_3_0_overloop_rook'') }}.'
+        data:
+          channel: rookmelder
+          color: red
+          importance: high
+          vibrationPattern: 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000
+          notification_icon: mdi:fire-alert
 - id: vaatwasser-melding-aan
   alias: Notify vaatwasser aan
-  description: ''
+  description: ""
   triggers:
-  - trigger: numeric_state
-    entity_id: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
-    value_template: '{{ state.state }}'
-    above: 10
-    for: 00:00:01
+    - trigger: numeric_state
+      entity_id: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
+      value_template: "{{ state.state }}"
+      above: 5.5
+      for: 00:00:30
   conditions: []
   actions:
-  - action: notify.mobile_app_pixel_7a
-    data:
-      title: Vaatwasser draait.
-      message: '{{ now().strftime(''%A %H:%M:%S'') }}: Verbruik: {{sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power}}'
+    - action: notify.mobile_app_pixel_7a
       data:
-        channel: vaatwasser
-        notification_icon: mdi:dishwasher
-        color: green
-        importance: high
-        vibrationPattern: 500, 500, 500
+        title: Vaatwasser draait.
+        message: "{{ now().strftime('%A %H:%M:%S') }}: Verbruik: {{states.sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power.state}}"
+        data:
+          channel: vaatwasser
+          tag: "vaatwasser"
+          notification_icon: mdi:dishwasher
+          color: green
+          importance: high
+          vibrationPattern: 500, 500, 500
 - id: vaatwasser-melding-klaar
   alias: Notify vaatwasser klaar
-  description: ''
+  description: ""
   triggers:
-  - trigger: numeric_state
-    entity_id: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
-    value_template: '{{ state.state }}'
-    below: 2
-    for: 00:00:05
+    - trigger: numeric_state
+      entity_id: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
+      value_template: "{{ state.state }}"
+      below: 2.1
+      above: 1.7
+      for: 00:00:30
   conditions: []
   actions:
-  - action: notify.mobile_app_pixel_7a
-    data:
-      title: Vaatwasser klaar.
-      message: '{{ now().strftime(''%A %H:%M:%S'') }}: Verbruik: {{sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power}}'
+    - action: notify.mobile_app_pixel_7a
       data:
-        channel: vaatwasser
-        notification_icon: mdi:dishwasher-off
-        color: green
-        importance: high
-        vibrationPattern: 500, 500, 500
-- id: '1728196786324'
+        title: Vaatwasser klaar.
+        message: "{{ now().strftime('%A %H:%M:%S') }}: Verbruik: {{states.sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power.state | float }}"
+        data:
+          channel: vaatwasser
+          tag: "vaatwasser"
+          notification_icon: mdi:dishwasher-off
+          color: green
+          importance: high
+          vibrationPattern: 500, 500, 500
+- id: vaatwasser-melding-open
+  alias: Notify vaatwasser open
+  description: ""
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
+      value_template: "{{ state.state }}"
+      below: 5.5
+      above: 2.1
+      for: 00:00:30
+  conditions: []
+  actions:
+    - action: notify.mobile_app_pixel_7a
+      data:
+        title: Vaatwasser open.
+        message: "{{ now().strftime('%A %H:%M:%S') }}: Verbruik: {{states.sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power.state | float }}"
+        data:
+          channel: vaatwasser
+          tag: "vaatwasser"
+          notification_icon: mdi:dishwasher
+          color: green
+          importance: high
+          vibrationPattern: 500, 500, 500
+- id: vaatwasser-melding-off
+  alias: Notify vaatwasser off
+  description: ""
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
+      value_template: "{{ state.state }}"
+      below: 1.7
+      for: 00:00:30
+  conditions: []
+  actions:
+    - action: notify.mobile_app_pixel_7a
+      data:
+        title: Vaatwasser uit.
+        message: "{{ now().strftime('%A %H:%M:%S') }}: Verbruik: {{states.sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power.state | float }}"
+        data:
+          channel: vaatwasser
+          tag: "vaatwasser"
+          notification_icon: mdi:dishwasher-off
+          color: green
+          importance: high
+          vibrationPattern: 500, 500, 500
+- id: "1728196786324"
   alias: Low Battery Notifications & Actions
-  description: ''
+  description: ""
   use_blueprint:
     path: Blackshome/low-battery-notifications-and-actions.yaml
     input:
@@ -241,10 +291,10 @@
       include_time: time_enabled
       time: 09:30:00
       weekday_options:
-      - sun
+        - sun
       include_easy_notify: enable_easy_notify
       sensor_selection: enable_all_sensors
       include_persistent_notification: enable_persistent_notification
       notify_device:
-      - 533b881f0d26d9db4de40e2070ddaa01
+        - 533b881f0d26d9db4de40e2070ddaa01
       notify_data: []
