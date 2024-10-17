@@ -221,8 +221,8 @@
       entity_id: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
       value_template: "{{ state.state }}"
       below: 2.1
-      above: 1.7
-      for: 00:00:30
+      above: 1.8
+      for: 00:05:00
   conditions: []
   actions:
     - action: notify.mobile_app_pixel_7a
@@ -245,7 +245,7 @@
       value_template: "{{ state.state }}"
       below: 5.5
       above: 2.1
-      for: 00:00:30
+      for: 00:02:00
   conditions: []
   actions:
     - action: notify.mobile_app_pixel_7a
@@ -266,8 +266,8 @@
     - trigger: numeric_state
       entity_id: sensor.sonoff_pow_r316_vaatwasser_sonoff_pow_r316_vaatwasser_power
       value_template: "{{ state.state }}"
-      below: 1.7
-      for: 00:00:30
+      below: 1.8
+      for: 00:02:00
   conditions: []
   actions:
     - action: notify.mobile_app_pixel_7a
