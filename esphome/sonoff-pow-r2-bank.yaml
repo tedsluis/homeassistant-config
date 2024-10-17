@@ -55,6 +55,7 @@ web_server:
 uart:
   rx_pin: RX
   baud_rate: 4800
+  parity: EVEN
 
 # get sensor measurements
 sensor:

@@ -50,9 +50,11 @@ uart:
   - rx_pin: GPIO3
     baud_rate: 4800
     id: dummy_uart  # Will end up being assigned UART0
+    parity: EVEN
   - rx_pin: GPIO16
     baud_rate: 4800
     id: active_uart  # Will end up being assigned UART1
+    parity: EVEN
 
 time:
   - platform: homeassistant
