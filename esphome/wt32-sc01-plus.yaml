@@ -410,9 +410,9 @@ external_components:
   - source: github://pr#6537
     components: [i80, io_bus, ili9xxx, spi]
     refresh: 1d
-  - source: github://pr#7453
-    components: [lvgl]
-    refresh: 1h
+  # - source: github://pr#7453
+  #   components: [lvgl]
+  #   refresh: 1h
 
 # power_supply:
 #   - id: backlight
@@ -539,89 +539,7 @@ lvgl:
     - my_display
   touchscreens:
     - my_touchscreen
-  color_depth: 16
-  bg_color: 0xFFFFFF
-  text_font: my_font
-
-  theme:
-    #label:
-    # text_font: roboto24 # set all your labels to use your custom defined font
-    button:
-      bg_color: 0x333333
-      #bg_grad_color: 0x333333
-      #bg_grad_dir: VER
-      bg_opa: 85%
-      border_color: 0x333333
-      border_width: 0
-      text_color: 0xFFFFFF
-      pressed: # set some btn colors to be different in pressed state
-        bg_color: 0x111111
-        bg_grad_color: 0x111111
-      checked: # set some btn colors to be different in checked state
-        bg_color: 0x111111
-        bg_grad_color: 0x111111
-        text_color: 0xf6ff00
-    buttonmatrix:
-      bg_opa: TRANSP
-      border_color: 0x333333
-      border_width: 0
-      text_color: 0xFFFFFF
-      pad_all: 0
-      items: # set all your btnmatrix buttons to use your custom defined styles and font
-        bg_color: 0x333333
-        bg_grad_color: 0x333333
-        bg_grad_dir: VER
-        bg_opa: COVER
-        border_color: 0x333333
-        border_width: 1
-        text_color: 0xFFFFFF
-        #text_font: roboto10
-        pressed:
-          bg_color: 0x111111
-          bg_grad_color: 0x111111
-        checked:
-          bg_color: 0x111111
-          bg_grad_color: 0x111111
-          text_color: 0xEEEEEE
-    switch:
-      bg_color: 0xC0C0C0
-      bg_grad_color: 0xb0b0b0
-      bg_grad_dir: VER
-      bg_opa: COVER
-      checked:
-        bg_color: 0x1d5f96
-        bg_grad_color: 0x03324A
-        bg_grad_dir: VER
-        bg_opa: COVER
-      knob:
-        bg_color: 0xFFFFFF
-        bg_grad_color: 0xC0C0C0
-        bg_grad_dir: VER
-        bg_opa: COVER
-    slider:
-      border_width: 1
-      border_opa: 30%
-      bg_color: 0x9c9c9c
-      bg_opa: 15%
-      indicator:
-        bg_color: 0x333333
-        bg_grad_color: 0x333333
-        bg_opa: COVER
-      knob:
-        bg_color: 0x444444
-        bg_grad_color: 0x444444
-        bg_opa: COVER
-        border_color: 0x444444
-        border_width: 1
-        text_color: 0xFFFFFF
-  #-------------------------------------------
   style_definitions:
-    - id: style_line
-      line_color: color_blue
-      line_width: 8
-      line_rounded: true
-      checked:
-        line_color: 0xff0000
     - id: header_footer
       bg_color: 0x444444
       bg_grad_color: 0x444444
@@ -636,9 +554,196 @@ lvgl:
       text_color: 0xFFFFFF
       width: 100%
       height: 40
+  top_layer:
+    widgets:
+      - buttonmatrix:
+          align: bottom_mid
+          styles: header_footer
+          pad_all: 0
+          outline_width: 0
+          id: top_layer
+          items:
+            styles: header_footer
+          rows:
+            - buttons:
+              - id: page_prev
+                text: "\uF053"
+                on_press:
+                  then:
+                    lvgl.page.previous:
+              - id: page_home
+                text: "\uF015"
+                on_press:
+                  then:
+                    lvgl.page.show: main_page
+              - id: page_next
+                text: "\uF054"
+                on_press:
+                  then:
+                    lvgl.page.next:
   pages:
     - id: main_page
       widgets:
-        - label:
-            align: CENTER
-            text: 'Hello World!'
+        - obj:
+            radius: 0
+            pad_all: 12
+            bg_color: 0xFFFFFF
+            height: 100%
+            width: 80%
+            widgets:
+            - spinner:
+                id: hello_world_spinner_
+                align: center
+                indicator:
+                  arc_color: tomato
+                height: 100
+                width: 100
+                spin_time: 2s
+                arc_length: 60deg
+            - label:
+                id: hello_world_label_
+                text: "Hallo Wereld!"
+                align: center
+                on_click:
+                    lvgl.spinner.update:
+                      id: hello_world_spinner_
+                      arc_color: springgreen
+            - checkbox:
+                pad_all: 8
+                text: Checkbox
+                align: top_right
+                on_click:
+                  lvgl.label.update:
+                    id: hello_world_label_
+                    text: "Checked!"
+            - button:
+                pad_all: 8
+                checkable: true
+                align: top_left
+                text_font: montserrat_20
+                on_click:
+                  lvgl.label.update:
+                    id: hello_world_label_
+                    text: "Clicked!"
+                widgets:
+                  - label:
+                      text: "Button"
+            - slider:
+                width: 80%
+                align: bottom_mid
+                on_value:
+                  lvgl.label.update:
+                    id: hello_world_label_
+                    text:
+                      format: "%.0f%%"
+                      args: [x]
+    - id: eerste_page
+      widgets:
+        - obj:
+            radius: 0
+            pad_all: 12
+            bg_color: 0xFFFFFF
+            height: 80%
+            width: 100%
+            widgets:
+            - spinner:
+                id: hello_world1_spinner_
+                align: top_mid
+                indicator:
+                  arc_color: tomato
+                height: 100
+                width: 100
+                spin_time: 2s
+                arc_length: 60deg
+            - label:
+                id: hello_world1_label_
+                text: "Dag Land!"
+                align: top_mid
+                on_click:
+                    lvgl.spinner.update:
+                      id: hello_world1_spinner_
+                      arc_color: springgreen
+            - checkbox:
+                pad_all: 8
+                text: Klikbox
+                align: bottom_left
+                on_click:
+                  lvgl.label.update:
+                    id: hello_world1_label_
+                    text: "Geselecteerd!"
+            - button:
+                pad_all: 8
+                checkable: true
+                align: bottom_right
+                text_font: montserrat_20
+                on_click:
+                  lvgl.label.update:
+                    id: hello_world1_label_
+                    text: "aangeklikt!"
+                widgets:
+                  - label:
+                      text: "Knop"
+            - slider:
+                width: 80%
+                align: center
+                on_value:
+                  lvgl.label.update:
+                    id: hello_world1_label_
+                    text:
+                      format: "%.0f%%"
+                      args: [x]
+    - id: tweede_page
+      widgets:
+        - obj:
+            radius: 0
+            pad_all: 12
+            bg_color: 0xFFFFFF
+            height: 80%
+            width: 100%
+            widgets:
+            - spinner:
+                id: hello_world2_spinner_
+                align: center
+                indicator:
+                  arc_color: tomato
+                height: 100
+                width: 100
+                spin_time: 2s
+                arc_length: 60deg
+            - label:
+                id: hello_world2_label_
+                text: "Dag Wereld!"
+                align: center
+                on_click:
+                    lvgl.spinner.update:
+                      id: hello_world2_spinner_
+                      arc_color: springgreen
+            - checkbox:
+                pad_all: 8
+                text: Checkbox
+                align: bottom_left
+                on_click:
+                  lvgl.label.update:
+                    id: hello_world2_label_
+                    text: "Geselecteerd!"
+            - button:
+                pad_all: 8
+                checkable: true
+                align: bottom_right
+                text_font: montserrat_20
+                on_click:
+                  lvgl.label.update:
+                    id: hello_world2_label_
+                    text: "aangeklikt!"
+                widgets:
+                  - label:
+                      text: "Knop"
+            - slider:
+                width: 80%
+                align: top_mid
+                on_value:
+                  lvgl.label.update:
+                    id: hello_world2_label_
+                    text:
+                      format: "%.0f%%"
+                      args: [x]
