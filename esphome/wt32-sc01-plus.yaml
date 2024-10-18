@@ -588,8 +588,8 @@ lvgl:
             radius: 0
             pad_all: 12
             bg_color: 0xFFFFFF
-            height: 100%
-            width: 80%
+            height: 80%
+            width: 100%
             widgets:
             - spinner:
                 id: hello_world_spinner_
@@ -643,7 +643,7 @@ lvgl:
             radius: 0
             pad_all: 12
             bg_color: 0xFFFFFF
-            height: 80%
+            height: 85%
             width: 100%
             widgets:
             - spinner:
@@ -698,7 +698,7 @@ lvgl:
             radius: 0
             pad_all: 12
             bg_color: 0xFFFFFF
-            height: 80%
+            height: 90%
             width: 100%
             widgets:
             - spinner:
