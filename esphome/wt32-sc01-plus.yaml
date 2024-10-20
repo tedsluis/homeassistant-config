@@ -557,22 +557,49 @@ lvgl:
       height: 40
   top_layer:
     widgets:
-      - label:
-          text: $power_off_icon
-          align: top_left
+      - obj:
           styles: header_footer
+          align: TOP_LEFT
           width: 60
-          text_align: center
-      - label:
-          text: $wifi_icon
-          id: lbl_hastatus
-          # hidden: true
-          align: top_right
+          height: 40
+          widgets:
+            - label:
+                text: $power_off_icon
+                align: LEFT_MID
+                y: 7
+                styles: header_footer
+                width: 30
+                text_align: center
+            - label:
+                text: $notifications_icon
+                align: LEFT_MID
+                x: 30
+                y: 7
+                styles: header_footer
+                width: 30
+                text_align: center
+      - obj:
           styles: header_footer
+          align: TOP_RIGHT
           width: 60
-          # x: -2
-          # y: 7
-          text_align: center
+          height: 40
+          widgets:
+            - label:
+                text: $error_icon
+                align: RIGHT_MID
+                x: -30
+                y: 7
+                styles: header_footer
+                width: 30
+                text_align: center
+            - label:
+                text: $wifi_icon
+                id: lbl_hastatus
+                align: RIGHT_MID
+                y: 7
+                styles: header_footer
+                width: 30
+                text_align: center
       - buttonmatrix:
           align: bottom_mid
           styles: header_footer
