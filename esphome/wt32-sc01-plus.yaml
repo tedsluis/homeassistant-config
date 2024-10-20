@@ -26,6 +26,10 @@ substitutions:
   radiator: "\U000F0438"
   ceiling_light: "\U000F0769"
   house_temp: "\U000F0F55"
+  power_off_icon: "\U0000F011"
+  notifications_icon: "\U0000F0F3"
+  error_icon: "\U0000F071"
+  wifi_icon: "\U0000F1EB"
   #weather icons
   cloudy: "\U000F0590"
   cloudyalert: "\U000F0F2F"
@@ -57,7 +61,7 @@ substitutions:
   tornado: "\U000F0F38"
   windy: "\U000F059D"
   windyvariant: "\U000F059E"
-  happyface: "\U000F01F5"
+  happyface: "\U000F01F5"  
 
 esphome:
   name: ${device_name}
@@ -71,9 +75,9 @@ esphome:
     board_build.flash_mode: dio
     board_build.flash_size: 16MB
     board_build.partitions: "/config/esphome/custom_partitions.csv"
-  # on_boot:
-  #   - delay: 15s
-  #   - lvgl.widget.hide: boot_screen
+  on_boot:
+    - delay: 10s
+    - lvgl.widget.hide: boot_screen
   #   - delay: 30s
   #   - lvgl.widget.hide: main_page
 
@@ -107,18 +111,21 @@ debug:
 api:
   encryption:
     key: !secret encryption_key
-  # on_client_connected:
-  #   - if:
-  #       condition:
-  #         lambda: 'return (0 == client_info.find("Home Assistant "));'
-  #       then:
-  #         - lvgl.widget.show: lbl_hastatus
-  # on_client_disconnected:
-  #   - if:
-  #       condition:
-  #         lambda: 'return (0 == client_info.find("Home Assistant "));'
-  #       then:
-  #         - lvgl.widget.hide: lbl_hastatus
+  on_client_connected:
+    - logger.log:
+        format: "Client %s connected to API with IP %s"
+        args: ["client_info.c_str()", "client_address.c_str()"]
+    - if:
+        condition:
+          lambda: 'return (0 == client_info.find("Home Assistant "));'
+        then:
+    # - lvgl.widget.show: lbl_hastatus
+  on_client_disconnected:
+    - if:
+        condition:
+          lambda: 'return (0 == client_info.find("Home Assistant "));'
+        then:
+    # - lvgl.widget.hide: lbl_hastatus
           
 ota:
   - platform: esphome
@@ -266,8 +273,8 @@ binary_sensor:
 #-------------------------------------------
 
 image:
-  - file: '/config/esphome/images/back1.png'
-    id: back1
+  - file: '/config/esphome/images/background1.png'
+    id: background1
     type: RGB565
   
   - file: '/config/esphome/images/ha_logo.png'
@@ -503,32 +510,18 @@ display:
     update_interval: never
 
 color:
-  - id: color_red
+  - id: red_color
     red: 100%
-  - id: color_green
+  - id: green_color
     green: 100%
-  - id: off_color
-    hex: FF4F00
-  - id: on_color
-    hex: 58D900
-  - id: balancing_color
-    red_int: 145
-    green_int: 245
-    blue_int: 242
-  - id: std_cell_voltage_color
-    hex: 58D900
-  - id: min_cell_voltage_color
-    hex: FF4F00
-  - id: max_cell_voltage_color
-    hex: 00ADFF
-  - id: label_heading_color
-    hex: FFFFFF
-  - id: label_value_color
-    hex: 58D900
-  - id: color_back
-    hex: FF0000
-  - id: color_blue
+  - id: black_color
+    white: 100%
+  - id: blue_color
     hex: 0000FF
+  - id: white_color
+    hex: FFFFFF
+  - id: light_blue_color
+    hex: 03A9F4
 
 #------------------------------------------
 # Content
@@ -540,9 +533,17 @@ lvgl:
   touchscreens:
     - my_touchscreen
   style_definitions:
+    - id: page_style
+      radius: 0
+      pad_all: 12
+      bg_color: white_color
+      align: CENTER
+      text_color: light_blue_color
+      width: 480
+      height: 240
     - id: header_footer
-      bg_color: 0x444444
-      bg_grad_color: 0x444444
+      bg_color: light_blue_color
+      bg_grad_color: light_blue_color
       bg_grad_dir: VER
       bg_opa: COVER
       border_width: 0
@@ -550,12 +551,28 @@ lvgl:
       pad_all: 0
       pad_row: 0
       pad_column: 0
-      border_color: 0x333333
-      text_color: 0xFFFFFF
+      border_color: light_blue_color
+      text_color: white_color
       width: 100%
       height: 40
   top_layer:
     widgets:
+      - label:
+          text: $power_off_icon
+          align: top_left
+          styles: header_footer
+          width: 60
+          text_align: center
+      - label:
+          text: $wifi_icon
+          id: lbl_hastatus
+          # hidden: true
+          align: top_right
+          styles: header_footer
+          width: 60
+          # x: -2
+          # y: 7
+          text_align: center
       - buttonmatrix:
           align: bottom_mid
           styles: header_footer
@@ -581,25 +598,50 @@ lvgl:
                 on_press:
                   then:
                     lvgl.page.next:
+      - obj:
+          id: boot_screen
+          x: 0
+          y: 0
+          width: 100%
+          height: 100%
+          bg_color: black_color
+          bg_opa: COVER
+          radius: 0
+          pad_all: 0
+          border_width: 0
+          widgets:
+            - image:
+                align: CENTER
+                src: boot_logo
+                y: -40
+            - spinner:
+                align: CENTER
+                y: 95
+                height: 50
+                width: 50
+                spin_time: 1s
+                arc_length: 60deg
+                arc_width: 8
+                indicator:
+                  arc_color: light_blue_color
+                  arc_width: 8
+          on_press:
+            - lvgl.widget.hide: boot_screen
   pages:
     - id: main_page
       widgets:
         - obj:
             align: TOP_MID
             styles: header_footer
+            width: 360
             widgets:
               - label:
                   text: "main page"
                   align: CENTER
                   text_align: CENTER
-                  text_color: 0xFFFFFF
+                  text_color: white_color
         - obj:
-            radius: 0
-            pad_all: 12
-            bg_color: 0xFFFFFF
-            align: CENTER
-            width: 480
-            height: 240
+            styles: page_style
             widgets:
             - spinner:
                 id: hello_world_spinner_
@@ -652,19 +694,15 @@ lvgl:
         - obj:
             align: TOP_MID
             styles: header_footer
+            width: 360
             widgets:
               - label:
                   text: "eesrte page"
                   align: CENTER
                   text_align: CENTER
-                  text_color: 0xFFFFFF
+                  text_color: white_color
         - obj:
-            radius: 0
-            pad_all: 12
-            bg_color: 0xFFFFFF
-            align: CENTER
-            width: 480
-            height: 240
+            styles: page_style
             widgets:
             - spinner:
                 id: hello_world1_spinner_
@@ -717,19 +755,15 @@ lvgl:
         - obj:
             align: TOP_MID
             styles: header_footer
+            width: 360
             widgets:
               - label:
                   text: "tweede page"
                   align: CENTER
                   text_align: CENTER
-                  text_color: 0xFFFFFF
+                  text_color: white_color
         - obj:
-            radius: 0
-            pad_all: 12
-            bg_color: 0xFFFFFF
-            align: CENTER
-            width: 480
-            height: 240
+            styles: page_style
             widgets:
             - spinner:
                 id: hello_world2_spinner_
