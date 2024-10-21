@@ -119,13 +119,13 @@ api:
         condition:
           lambda: 'return (0 == client_info.find("Home Assistant "));'
         then:
-    # - lvgl.widget.show: lbl_hastatus
+          - lvgl.widget.show: lbl_hastatus
   on_client_disconnected:
     - if:
         condition:
           lambda: 'return (0 == client_info.find("Home Assistant "));'
         then:
-    # - lvgl.widget.hide: lbl_hastatus
+          - lvgl.widget.hide: lbl_hastatus
           
 ota:
   - platform: esphome
@@ -154,7 +154,40 @@ web_server:
 
 time:
   - platform: homeassistant
-    id: homeassistant_time
+    id: time_comp
+    on_time_sync:
+      - script.execute: time_update
+    on_time:
+      - minutes: '*'
+        seconds: 0
+        then:
+          - script.execute: time_update
+
+script:
+  - id: time_update
+    then:
+      - lvgl.indicator.update:
+          id: minute_hand
+          value: !lambda |-
+            return id(time_comp).now().minute;
+      - lvgl.indicator.update:
+          id: hour_hand
+          value: !lambda |-
+            auto now = id(time_comp).now();
+            return std::fmod(now.hour, 12) * 60 + now.minute;
+      - lvgl.label.update:
+          id: date_label
+          text: !lambda |-
+            static const char * const mon_names[] = {"JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AUG", "SEP", "OKT", "NOV", "DEC"};
+            static char date_buf[8];
+            auto now = id(time_comp).now();
+            snprintf(date_buf, sizeof(date_buf), "%s %2d", mon_names[now.month-1], now.day_of_month);
+            return date_buf;
+      - lvgl.label.update:
+          id: day_label
+          text: !lambda |-
+            static const char * const day_names[] = {"ZON", "MAA", "DIN", "WOE", "DON", "VRI", "ZAT"};
+            return day_names[id(time_comp).now().day_of_week - 1];
 
 sensor:
   - platform: wifi_signal
@@ -533,6 +566,12 @@ lvgl:
   touchscreens:
     - my_touchscreen
   style_definitions:
+    - id: date_style
+      align: CENTER
+      text_color: light_blue_color
+      bg_opa: COVER
+      radius: 4
+      pad_all: 2
     - id: page_style
       radius: 0
       pad_all: 12
@@ -560,45 +599,45 @@ lvgl:
       - obj:
           styles: header_footer
           align: TOP_LEFT
-          width: 60
+          width: 90
           height: 40
           widgets:
             - label:
                 text: $power_off_icon
                 align: LEFT_MID
-                y: 7
+                y: 25%
                 styles: header_footer
-                width: 30
+                width: 50%
                 text_align: center
             - label:
                 text: $notifications_icon
                 align: LEFT_MID
-                x: 30
-                y: 7
+                x: 50%
+                y: 25%
                 styles: header_footer
-                width: 30
+                width: 50%
                 text_align: center
       - obj:
           styles: header_footer
           align: TOP_RIGHT
-          width: 60
+          width: 90
           height: 40
           widgets:
             - label:
                 text: $error_icon
                 align: RIGHT_MID
-                x: -30
-                y: 7
+                x: -45
+                y: 25%
                 styles: header_footer
-                width: 30
+                width: 50%
                 text_align: center
             - label:
                 text: $wifi_icon
                 id: lbl_hastatus
                 align: RIGHT_MID
-                y: 7
+                y: 25%
                 styles: header_footer
-                width: 30
+                width: 50%
                 text_align: center
       - buttonmatrix:
           align: bottom_mid
@@ -620,6 +659,11 @@ lvgl:
                 on_press:
                   then:
                     lvgl.page.show: main_page
+              - id: page_menu
+                text: "\uF0C9"
+                on_press:
+                  then:
+                    lvgl.page.show: menu_page
               - id: page_next
                 text: "\uF054"
                 on_press:
@@ -660,7 +704,7 @@ lvgl:
         - obj:
             align: TOP_MID
             styles: header_footer
-            width: 360
+            width: 300
             widgets:
               - label:
                   text: "main page"
@@ -721,7 +765,7 @@ lvgl:
         - obj:
             align: TOP_MID
             styles: header_footer
-            width: 360
+            width: 300
             widgets:
               - label:
                   text: "eesrte page"
@@ -782,7 +826,7 @@ lvgl:
         - obj:
             align: TOP_MID
             styles: header_footer
-            width: 360
+            width: 300
             widgets:
               - label:
                   text: "tweede page"
@@ -838,3 +882,107 @@ lvgl:
                     text:
                       format: "%.0f%%"
                       args: [x]
+    - id: menu_page
+      widgets:
+        - obj:
+            align: TOP_MID
+            styles: header_footer
+            width: 300
+            widgets:
+              - label:
+                  text: "menu page"
+                  align: CENTER
+                  text_align: CENTER
+                  text_color: white_color
+        - obj:
+            styles: page_style
+            widgets:
+              - label:
+                  text: "MENU"
+                  align: CENTER
+                  text_align: CENTER
+                  styles: page_style
+    - id: clock_page
+      widgets:
+        - obj:
+            align: TOP_MID
+            styles: header_footer
+            width: 300
+            widgets:
+              - label:
+                  text: "clock page"
+                  align: CENTER
+                  text_align: CENTER
+                  text_color: white_color
+        - obj:
+            styles: page_style
+            widgets:
+              - obj: # clock container
+                  height: SIZE_CONTENT
+                  width: 240
+                  align: CENTER
+                  pad_all: 0
+                  border_width: 0
+                  bg_color: white_color
+                  widgets:
+                    - meter: # clock face
+                        height: 210
+                        width: 210
+                        align: CENTER
+                        bg_opa: TRANSP
+                        border_width: 0
+                        text_color: 0x000000
+                        scales:
+                          - range_from: 0 # minutes scale
+                            range_to: 60
+                            angle_range: 360
+                            rotation: 270
+                            ticks:
+                              width: 1
+                              count: 61
+                              length: 10
+                              color: light_blue_color
+                            indicators:
+                              - line:
+                                  id: minute_hand
+                                  width: 3
+                                  color: light_blue_color
+                                  r_mod: -4
+                                  value: 0
+                          - range_from: 1 # hours scale for labels
+                            range_to: 12
+                            angle_range: 330
+                            rotation: 300
+                            ticks:
+                              width: 1
+                              count: 12
+                              length: 1
+                              major:
+                                stride: 1
+                                width: 4
+                                length: 10
+                                color: light_blue_color
+                                label_gap: 12
+                          - range_from: 0 # hi-res hours scale for hand
+                            range_to: 720
+                            angle_range: 360
+                            rotation: 270
+                            ticks:
+                              count: 0
+                            indicators:
+                              - line:
+                                  id: hour_hand
+                                  width: 5
+                                  color: light_blue_color
+                                  r_mod: -30
+                                  value: 0
+                    - label:
+                        id: day_label
+                        styles: date_style
+                        y: -30
+                    - label:
+                        id: date_label
+                        styles: date_style
+                        y: 30
+
+            
