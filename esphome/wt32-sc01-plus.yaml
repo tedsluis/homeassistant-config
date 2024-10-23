@@ -78,8 +78,6 @@ esphome:
   on_boot:
     - delay: 10s
     - lvgl.widget.hide: boot_screen
-  #   - delay: 30s
-  #   - lvgl.widget.hide: main_page
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -138,6 +136,8 @@ wifi:
     static_ip: ${device_ip}
     gateway: 192.168.11.1
     subnet: 255.255.255.0
+    dns1: 192.168.11.138
+    dns2: 192.168.11.1
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -153,10 +153,13 @@ web_server:
     password: !secret webserver_password
 
 time:
-  - platform: homeassistant
+  - platform: sntp
     id: time_comp
+    timezone: "Europe/Amsterdam"
     on_time_sync:
-      - script.execute: time_update
+      then:
+        - logger.log: "Synchronized system clock"
+        - script.execute: time_update
     on_time:
       - minutes: '*'
         seconds: 0
@@ -188,6 +191,7 @@ script:
           text: !lambda |-
             static const char * const day_names[] = {"ZON", "MAA", "DIN", "WOE", "DON", "VRI", "ZAT"};
             return day_names[id(time_comp).now().day_of_week - 1];
+      - logger.log: "Clock updated"
 
 sensor:
   - platform: wifi_signal
