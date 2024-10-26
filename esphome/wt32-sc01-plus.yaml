@@ -189,7 +189,7 @@ script:
       - lvgl.label.update:
           id: day_label
           text: !lambda |-
-            static const char * const day_names[] = {"ZON", "MAA", "DIN", "WOE", "DON", "VRI", "ZAT"};
+            static const char * const day_names[] = {"ZO", "MA", "DI", "WO", "DO", "VR", "ZA"};
             return day_names[id(time_comp).now().day_of_week - 1];
       - logger.log: "Clock updated"
 
@@ -212,28 +212,30 @@ sensor:
     name: ESP32 Internal temperature
     entity_category: diagnostic
 
-  # - platform: homeassistant
-  #   id: house_setpoint_ha
-  #   entity_id: input_number.house_temperature_setpoint
-  #   on_value:
-  #     - logger.log: id(house_setpoint_ha).state.c_str()
-  #     - lvgl.label.update:
-  #         id: house_setpoint_display
-  #         text: 
-  #           format: "%.1f °C"
-  #           args: ["id(house_setpoint_ha).state"]
+  - platform: homeassistant
+    id: house_setpoint_ha
+    entity_id: climate.gtw_16
+    attribute: temperature
+    on_value:
+      - logger.log: id(house_setpoint_ha).state.c_str()
+      - lvgl.label.update:
+          id: house_setpoint_display
+          text: 
+            format: "%.1f °C"
+            args: ["id(house_setpoint_ha).state"]
       
-  # - platform: homeassistant
-  #   id: house_temp_sensor
-  #   entity_id: sensor.house_average_temperature
-  #   on_value:
-  #     then:
-  #        - lvgl.label.update:
-  #           id: display_house_temp
-  #           text: 
-  #             format: "$house_temp %.1f °C"
-  #             args: ["id(house_temp_sensor).state"]
- 
+  - platform: homeassistant
+    id: house_temp_sensor
+    entity_id: climate.gtw_16
+    attribute: current_temperature
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: display_house_temp
+            text: 
+              format: "$house_temp %.1f °C"
+              args: ["id(house_temp_sensor).state"]
+
 text_sensor:
   - platform: version
     name: '${device_name}_version'
@@ -245,65 +247,82 @@ text_sensor:
   - platform: homeassistant
     id: ha_time
     entity_id: sensor.time
+  - platform: homeassistant
+    id: ha_weather_cond
+    entity_id: weather.bachstraat20
+    filters:
+      - to_upper
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: display_weather
+            text: !lambda return id(ha_weather_cond).state.c_str();
+        #- text_sensor.template.publish:
+        #    id: weather_condition_icon
+        #    state: !lambda return id(ha_weather_cond).state.c_str();
+  - platform: template
+    id: weather_condition_icon
+    lambda: |-
+      std::string state = id(ha_weather_cond).state.c_str();
+      if (state == "RAINY") { return std::string("$rainy"); }
+      else if (state == "CLOUDY") { return std::string("$cloudy"); }
+      else if (state == "PARTLYCLOUDY") { return std::string("$partlycloudy"); }
+      else if (state == "SUNNY") { return std::string("$sunny"); }
+      else if (state == "FOG") { return std::string("$fog"); }
+      else if (state == "HAIL") { return std::string("$hail"); }
+      else if (state == "HAZY") { return std::string("$hazy"); }
+      else if (state == "LIGHTNING") { return std::string("$lightning"); }
+      else if (state == "LIGHTNINGRAINY") { return std::string("$lightningrainy"); }
+      else if (state == "NIGHT") { return std::string("$night"); }
+      else if (state == "NIGHTPARTLYCLOUDY") { return std::string("$nightpartlycloudy"); }
+      else if (state == "PARTLYRAINY") { return std::string("$partlyrainy"); }
+      else if (state == "PARTLYLIGHTNING") { return std::string("$partlylightning"); }
+      else if (state == "PARTLYSNOWY") { return std::string("$partlysnowy"); }
+      else if (state == "PARTLYSNOWYRAINY") { return std::string("$partlysnowyrainy"); }
+      else if (state == "POURING") { return std::string("$pouring"); }
+      else if (state == "SNOWY") { return std::string("$snowy"); }
+      else if (state == "SNOWYHEAVY") { return std::string("$snowyheavy"); }
+      else if (state == "SUNSET") { return std::string("$sunset"); }
+      else if (state == "TORNADO") { return std::string("$tornado"); }
+      else if (state == "WINDY") { return std::string("$windy"); }
+      else if (state == "HURRICANE") { return std::string("$hurricane"); }
+      return std::string("$happyface");
+    on_value:
+      then:
+        - logger.log: id(weather_condition_icon).state.c_str()
+        - lvgl.label.update:
+            id: display_weather_icon
+            text: !lambda return id(weather_condition_icon).state.c_str();
+
+  - platform: homeassistant
+    id: ha_weather_temp
+    entity_id: weather.bachstraat20
+    attribute: temperature
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: display_temp
+            text: 
+              format: "\U000F050F %s °C"
+              args: ["id(ha_weather_temp).state.c_str()"]
+
+  - platform: template
+    name: Uptime
+    lambda: |-
+      int seconds = (id(uptime_internal).state);
+      int days = seconds / (24 * 3600);
+      seconds = seconds % (24 * 3600); 
+      int hours = seconds / 3600;
+      seconds = seconds % 3600;
+      int minutes = seconds /  60;
+      seconds = seconds % 60;
+      return { ( std::to_string(days) + "d " + std::to_string(hours) + "h " + std::to_string(minutes) + "m " + std::to_string(seconds) + "s").c_str() };
+    icon: mdi:clock-start
+    update_interval: 60s
 
 binary_sensor:
   - platform: status
     name: "${device_name} Status"
-    
-  #   on_value:
-  #     then:
-  #       - lvgl.label.update:
-  #           id: display_time
-  #           text: !lambda return id(ha_time).state.c_str();
-  # - platform: homeassistant
-  #   id: ha_date
-  #   entity_id: sensor.date
-  #   on_value:
-  #     then:
-  #       - lvgl.label.update:
-  #           id: display_date
-  #           text: !lambda |-
-  #             std::string date_str = id(ha_date).state.c_str();
-  #             std::string year = date_str.substr(0, 4);
-  #             std::string month = date_str.substr(5, 2);
-  #             std::string day = date_str.substr(8, 2);
-  #             return (day + "/" + month + "/" + year).c_str();
-
-  # - platform: template
-  #   id: weather_condition_icon
-  #   lambda: |-
-  #     std::string state = id(ha_weather_cond).state.c_str();
-  #     if (state == "RAINY") { return std::string("$rainy"); }
-  #     else if (state == "CLOUDY") { return std::string("$cloudy"); }
-  #     else if (state == "PARTLYCLOUDY") { return std::string("$partlycloudy"); }
-  #     else if (state == "SUNNY") { return std::string("$sunny"); }
-  #     else if (state == "FOG") { return std::string("$fog"); }
-  #     else if (state == "HAIL") { return std::string("$hail"); }
-  #     else if (state == "HAZY") { return std::string("$hazy"); }
-  #     else if (state == "LIGHTNING") { return std::string("$lightning"); }
-  #     else if (state == "LIGHTNINGRAINY") { return std::string("$lightningrainy"); }
-  #     else if (state == "NIGHT") { return std::string("$night"); }
-  #     else if (state == "NIGHTPARTLYCLOUDY") { return std::string("$nightpartlycloudy"); }
-  #     else if (state == "PARTLYRAINY") { return std::string("$partlyrainy"); }
-  #     else if (state == "PARTLYLIGHTNING") { return std::string("$partlylightning"); }
-  #     else if (state == "PARTLYSNOWY") { return std::string("$partlysnowy"); }
-  #     else if (state == "PARTLYSNOWYRAINY") { return std::string("$partlysnowyrainy"); }
-  #     else if (state == "POURING") { return std::string("$pouring"); }
-  #     else if (state == "SNOWY") { return std::string("$snowy"); }
-  #     else if (state == "SNOWYHEAVY") { return std::string("$snowyheavy"); }
-  #     else if (state == "SUNSET") { return std::string("$sunset"); }
-  #     else if (state == "TORNADO") { return std::string("$tornado"); }
-  #     else if (state == "WINDY") { return std::string("$windy"); }
-  #     else if (state == "HURRICANE") { return std::string("$hurricane"); }
-  #     return std::string("$happyface");
-  #   on_value:
-  #     then:
-  #       - logger.log: id(weather_condition_icon).state.c_str()
-  #       - lvgl.label.update:
-  #           id: display_weather_icon
-  #           text: !lambda return id(weather_condition_icon).state.c_str();
-  
-
 
 #-------------------------------------------
 # Graphicsd and Fonts
@@ -323,8 +342,8 @@ image:
 font:
   - file: "gfonts://Roboto"
     id: roboto24
-    size: 24
-    bpp: 4
+    size: 12
+    bpp: 2
     extras:
       - file: 'fonts/materialdesignicons-webfont.ttf' # http://materialdesignicons.com/cdn/7.4.47/ 
         glyphs: [
@@ -343,7 +362,8 @@ font:
           "\U000f0084",
           "\U000f0091",
           "\U000F050F", # Thermometer
-          $house_temp 
+          $house_temp,
+          $happyface 
           ]
   - file: "gfonts://Roboto"
     id: weather_icons
@@ -454,16 +474,6 @@ external_components:
   - source: github://pr#6537
     components: [i80, io_bus, ili9xxx, spi]
     refresh: 1d
-  # - source: github://pr#7453
-  #   components: [lvgl]
-  #   refresh: 1h
-
-# power_supply:
-#   - id: backlight
-#     enable_on_boot: true
-#     pin:
-#       ignore_strapping_warning: true
-#       number: GPIO45
 
 i80:
   dc_pin: 
@@ -499,6 +509,15 @@ touchscreen:
       mirror_y: false
       mirror_x: true
     display: my_display
+    on_release:
+      then:
+        - if:
+            condition: lvgl.is_paused
+            then:
+              - logger.log: "turn on backlight, LVGL resume"
+              - light.turn_on: display_backlight
+              - lvgl.resume:
+              - lvgl.widget.redraw:
     on_touch:
       - logger.log:
             format: Touch at (%d, %d)
@@ -522,7 +541,7 @@ output:
 
 light:
   - platform: monochromatic
-    id: backlight
+    id: display_backlight
     output: backlight_pwm
     restore_mode: ALWAYS_ON
 
@@ -569,6 +588,14 @@ lvgl:
     - my_display
   touchscreens:
     - my_touchscreen
+  on_idle:
+    timeout: 60s
+    then:
+      - logger.log: "LVGL is idle"
+      - lvgl.pause:
+      - light.turn_off:
+          id: display_backlight
+          transition_length: 5s
   style_definitions:
     - id: date_style
       align: CENTER
@@ -920,11 +947,16 @@ lvgl:
                   text_color: white_color
         - obj:
             styles: page_style
+            height: 160
+            width: 100%
+            align: CENTER
+            pad_all: 0
+            border_width: 0
             widgets:
               - obj: # clock container
                   height: SIZE_CONTENT
-                  width: 240
-                  align: CENTER
+                  width: 100%
+                  align: RIGHT_MID
                   pad_all: 0
                   border_width: 0
                   bg_color: white_color
@@ -989,4 +1021,67 @@ lvgl:
                         styles: date_style
                         y: 30
 
-            
+    - id: another_page
+      widgets:
+        - obj:
+            align: TOP_MID
+            styles: header_footer
+            width: 300
+            widgets:
+              - label:
+                  text: "another page"
+                  align: CENTER
+                  text_align: CENTER
+                  text_color: white_color
+        - obj:
+            styles: page_style
+            height: 160
+            width: 100%
+            align: CENTER
+            pad_all: 0
+            border_width: 0
+            widgets:
+              - obj: # clock container
+                  height: SIZE_CONTENT
+                  width: 100%
+                  align: LEFT_MID
+                  pad_all: 0
+                  border_width: 0
+                  bg_color: white_color
+                  widgets:
+                    - label:
+                        align: CENTER
+                        id: display_weather_icon
+                        text: $happyface
+                        styles: page_style
+                        # text_font: weather_icons
+                        text_font: roboto24
+                        y: 0
+                    - label:
+                        align: CENTER
+                        id: display_weather
+                        text: weather
+                        text_font: roboto24
+                        styles: page_style
+                        y: 33
+                    - label:
+                        align: CENTER
+                        id: house_setpoint_display
+                        text_font: roboto24
+                        text: "--- °C"
+                        styles: page_style
+                        y: 66
+                    - label:
+                        align: CENTER
+                        id: display_house_temp
+                        text: house temp
+                        text_font: roboto24
+                        styles: page_style
+                        y: 99
+                    - label:
+                        align: CENTER
+                        id: display_temp
+                        text: temp
+                        text_font: roboto24
+                        styles: page_style
+                        y: 132
