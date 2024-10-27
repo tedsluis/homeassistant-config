@@ -195,23 +195,70 @@ script:
 
 sensor:
   - platform: wifi_signal
+    id: wifi_signal_dbm
     name: '${device_name}_wifi_signal'
     update_interval: 60s
+    on_value:
+      - logger.log: id(wifi_signal_dbm).state.c_str()
+      - lvgl.label.update:
+          id: wifi_signal_dbm_display
+          text: 
+            format: "wifi signal: %.1f dbm"
+            args: ["id(wifi_signal_dbm).state"]
   - platform: uptime
     id: uptime_internal
   - platform: debug
     free:
+      id: heap_free
       name: "Heap Free"
+      on_value:
+        - logger.log: id(heap_free).state.c_str()
+        - lvgl.label.update:
+            id: heap_free_display
+            text: 
+              format: "free heap: %.1f bytes"
+              args: ["id(heap_free).state"]
     block:
+      id: heap_max_block
       name: "Heap Max Block"
+      on_value:
+        - logger.log: id(heap_max_block).state.c_str()
+        - lvgl.label.update:
+            id: heap_max_block_display
+            text: 
+              format: "heap max block: %.1f bytes"
+              args: ["id(heap_max_block).state"]
     loop_time:
+      id: loop_time
       name: "Loop Time"
+      on_value:
+        - logger.log: id(loop_time).state.c_str()
+        - lvgl.label.update:
+            id: loop_time_display
+            text: 
+              format: "loop time: %.1f ms"
+              args: ["id(loop_time).state"]
     psram:
+      id: free_psram
       name: "Free PSRAM"
+      on_value:
+        - logger.log: id(free_psram).state.c_str()
+        - lvgl.label.update:
+            id: free_psram_display
+            text: 
+              format: "free_psram: %.1f bytes"
+              args: ["id(free_psram).state"]
   - platform: internal_temperature
+    id: esp32_internal_temperature
     name: ESP32 Internal temperature
     entity_category: diagnostic
-
+    on_value:
+      - logger.log: id(esp32_internal_temperature).state.c_str()
+      - lvgl.label.update:
+          id: esp32_internal_temperature_display
+          text: 
+            format: "esp32 internal temperature: %.1f °C"
+            args: ["id(esp32_internal_temperature).state"]
   - platform: homeassistant
     id: house_setpoint_ha
     entity_id: climate.gtw_16
@@ -229,7 +276,7 @@ sensor:
     entity_id: climate.gtw_16
     attribute: current_temperature
     on_value:
-      then:
+        - logger.log: id(house_temp_sensor).state.c_str()
         - lvgl.label.update:
             id: display_house_temp
             text: 
@@ -238,12 +285,37 @@ sensor:
 
 text_sensor:
   - platform: version
+    id: platform_version
     name: '${device_name}_version'
+    on_value:
+        - logger.log: id(platform_version).state.c_str()
+        - lvgl.label.update:
+            id: platform_version_display
+            text: 
+              format: "platform version: %s"
+              args: ["id(platform_version).state.c_str()"]
   - platform: wifi_info
     ip_address:
+      id: device_ip_address
       name: ${device_ip}
+      on_value:
+        - logger.log: id(device_ip_address).state.c_str()
+        - lvgl.label.update:
+            id: device_ip_address_display
+            text: 
+              format: "ip address: %s"
+              args: ["id(device_ip_address).state.c_str()"]
     ssid:
+      id: ssid_connected
       name: !secret wifi_ssid
+      update_interval: 60s
+      on_value:
+        - logger.log: id(ssid_connected).state.c_str()
+        - lvgl.label.update:
+            id: ssid_connected_display
+            text: 
+              format: "ssid: %s"
+              args: ["id(ssid_connected).state.c_str()"]
   - platform: homeassistant
     id: ha_time
     entity_id: sensor.time
@@ -253,7 +325,7 @@ text_sensor:
     filters:
       - to_upper
     on_value:
-      then:
+        - logger.log: id(ha_weather_cond).state.c_str()
         - lvgl.label.update:
             id: display_weather
             text: !lambda return id(ha_weather_cond).state.c_str();
@@ -288,7 +360,6 @@ text_sensor:
       else if (state == "HURRICANE") { return std::string("$hurricane"); }
       return std::string("$happyface");
     on_value:
-      then:
         - logger.log: id(weather_condition_icon).state.c_str()
         - lvgl.label.update:
             id: display_weather_icon
@@ -299,7 +370,7 @@ text_sensor:
     entity_id: weather.bachstraat20
     attribute: temperature
     on_value:
-      then:
+        - logger.log: id(ha_weather_temp).state.c_str()
         - lvgl.label.update:
             id: display_temp
             text: 
@@ -308,6 +379,7 @@ text_sensor:
 
   - platform: template
     name: Uptime
+    id: my_display_uptime
     lambda: |-
       int seconds = (id(uptime_internal).state);
       int days = seconds / (24 * 3600);
@@ -319,10 +391,25 @@ text_sensor:
       return { ( std::to_string(days) + "d " + std::to_string(hours) + "h " + std::to_string(minutes) + "m " + std::to_string(seconds) + "s").c_str() };
     icon: mdi:clock-start
     update_interval: 60s
+    on_value:
+        - lvgl.label.update:
+            id: display_uptime
+            text: 
+              format: "uptime %s"
+              args: ["id(my_display_uptime).state.c_str()"]
 
 binary_sensor:
   - platform: status
+    id: device_status
     name: "${device_name} Status"
+    on_state:
+      then:
+        - logger.log: id(device_status).state.C_str()
+        - lvgl.label.update:
+            id: device_status_display
+            text: 
+              format: "device_status: %.1f"
+              args: ["id(loop_time).state"]
 
 #-------------------------------------------
 # Graphicsd and Fonts
@@ -1035,13 +1122,13 @@ lvgl:
                   text_color: white_color
         - obj:
             styles: page_style
-            height: 160
+            height: 240
             width: 100%
             align: CENTER
             pad_all: 0
             border_width: 0
             widgets:
-              - obj: # clock container
+              - obj: 
                   height: SIZE_CONTENT
                   width: 100%
                   align: LEFT_MID
@@ -1054,34 +1141,144 @@ lvgl:
                         id: display_weather_icon
                         text: $happyface
                         styles: page_style
-                        # text_font: weather_icons
-                        text_font: roboto24
+                        text_font: weather_icons
                         y: 0
+                        x: 240
                     - label:
                         align: CENTER
                         id: display_weather
                         text: weather
                         text_font: roboto24
                         styles: page_style
-                        y: 33
+                        y: 0
                     - label:
                         align: CENTER
                         id: house_setpoint_display
                         text_font: roboto24
                         text: "--- °C"
                         styles: page_style
-                        y: 66
+                        y: 20
                     - label:
                         align: CENTER
                         id: display_house_temp
                         text: house temp
                         text_font: roboto24
                         styles: page_style
-                        y: 99
+                        y: 40
                     - label:
                         align: CENTER
                         id: display_temp
                         text: temp
                         text_font: roboto24
                         styles: page_style
-                        y: 132
+                        y: 60
+    - id: info_page
+      widgets:
+        - obj:
+            align: TOP_MID
+            styles: header_footer
+            width: 300
+            widgets:
+              - label:
+                  text: "info page"
+                  align: CENTER
+                  text_align: CENTER
+                  text_color: white_color
+        - obj:
+            styles: page_style
+            height: 240
+            width: 100%
+            align: CENTER
+            pad_all: 0
+            border_width: 0
+            widgets:
+              - obj: 
+                  height: 240
+                  width: 100%
+                  align: LEFT_MID
+                  pad_all: 0
+                  border_width: 0
+                  bg_color: white_color
+                  widgets:
+                    - label:
+                        align: CENTER
+                        id: heap_free_display
+                        text: "heap free"
+                        styles: page_style
+                        text_font: roboto24
+                        y: 0
+                        x: 240
+                    - label:
+                        align: CENTER
+                        id: heap_max_block_display
+                        text: "heap max block"
+                        styles: page_style
+                        text_font: roboto24
+                        y: 20
+                        x: 240
+                    - label:
+                        align: CENTER
+                        id: loop_time_display
+                        text: "loop time"
+                        styles: page_style
+                        text_font: roboto24
+                        y: 40
+                        x: 240
+                    - label:
+                        align: CENTER
+                        id: free_psram_display
+                        text: "free psram"
+                        styles: page_style
+                        text_font: roboto24
+                        y: 60
+                        x: 240
+                    - label:
+                        align: CENTER
+                        id: display_uptime
+                        text: uptime
+                        text_font: roboto24
+                        styles: page_style
+                        y: 80
+                        x: 240
+                    - label:
+                        align: CENTER
+                        id: ssid_connected_display
+                        text: "ssid connected"
+                        text_font: roboto24
+                        styles: page_style
+                        y: 0
+                    - label:
+                        align: CENTER
+                        id: device_ip_address_display
+                        text_font: roboto24
+                        text: "device ip address"
+                        styles: page_style
+                        y: 20
+                    - label:
+                        align: CENTER
+                        id: platform_version_display
+                        text: "platform version" 
+                        text_font: roboto24
+                        styles: page_style
+                        y: 40
+                    - label:
+                        align: CENTER
+                        id: esp32_internal_temperature_display
+                        text: "esp32 internal temperature"
+                        text_font: roboto24
+                        styles: page_style
+                        y: 60
+                    - label:
+                        align: CENTER
+                        id: wifi_signal_dbm_display
+                        text: "wifi signal"
+                        text_font: roboto24
+                        styles: page_style
+                        y: 80
+                    - label:
+                        align: CENTER
+                        id: device_status_display
+                        text: "device status"
+                        text_font: roboto24
+                        styles: page_style
+                        y: 100
