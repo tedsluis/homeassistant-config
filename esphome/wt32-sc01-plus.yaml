@@ -404,12 +404,12 @@ binary_sensor:
     name: "${device_name} Status"
     on_state:
       then:
-        - logger.log: id(device_status).state.C_str()
+        - logger.log: id(device_status).state
         - lvgl.label.update:
             id: device_status_display
             text: 
-              format: "device_status: %.1f"
-              args: ["id(loop_time).state"]
+              format: "device_status: %d"
+              args: ["id(device_status).state"]
 
 #-------------------------------------------
 # Graphicsd and Fonts
@@ -1278,7 +1278,7 @@ lvgl:
                     - label:
                         align: CENTER
                         id: device_status_display
-                        text: "device status"
+                        text: "device status: 0"
                         text_font: roboto24
                         styles: page_style
                         y: 100
